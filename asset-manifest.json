@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/pfe-proo/static/css/main.eb422333.css",
+    "main.js": "/pfe-proo/static/js/main.a76dbc06.js",
+    "static/js/952.8051a8e8.chunk.js": "/pfe-proo/static/js/952.8051a8e8.chunk.js",
+    "static/js/453.4fc71e10.chunk.js": "/pfe-proo/static/js/453.4fc71e10.chunk.js",
+    "static/media/outhimage.png": "/pfe-proo/static/media/outhimage.711865cfa9edf39af5b0.png",
+    "index.html": "/pfe-proo/index.html",
+    "main.eb422333.css.map": "/pfe-proo/static/css/main.eb422333.css.map",
+    "main.a76dbc06.js.map": "/pfe-proo/static/js/main.a76dbc06.js.map",
+    "952.8051a8e8.chunk.js.map": "/pfe-proo/static/js/952.8051a8e8.chunk.js.map",
+    "453.4fc71e10.chunk.js.map": "/pfe-proo/static/js/453.4fc71e10.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.eb422333.css",
+    "static/js/main.a76dbc06.js"
+  ]
+}
