@@ -1,41 +1,11 @@
-/* Conteneur principal divisé en deux */
-.main-container {
+.signup-main-container {
   display: flex;
   height: 100vh;
   overflow: hidden;
-  font-family: 'Inter', sans-serif;
 }
 
-/* Partie login à gauche */
-.login-container {
-  width: 50%;
-  padding: 50px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center; 
-}
-
-/* Partie image à droite */
-.image-container {
-  width: 50%;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #000;
-}
-
-.image-container img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.8;
-}
-
-/* Carte de connexion */
-.login-card {
+/* Partie gauche */
+.signup-left {
   width: 50%;
   padding: 50px;
   display: flex;
@@ -44,7 +14,6 @@
   align-items: center; /* Centrer horizontalement */
 }
 
-/* Logo */
 .logo {
   font-size: 30px;
   color: #6b21a8;
@@ -53,24 +22,17 @@
   text-align: center;
 }
 
-/* Titres et paragraphes */
 h2 {
   margin-bottom: 20px;
   text-align: center;
 }
 
-p {
-  color: #666;
-  margin-bottom: 20px;
-}
-
-/* Champs */
 form {
- /* width: 100%;*/
-  
+  width: 100%;
+  max-width: 200px; /* Limiter la largeur du formulaire */
   display: flex;
   flex-direction: column;
-  align-items: center; 
+  align-items: center; /* Centrer les éléments du formulaire */
 }
 
 .input-group {
@@ -83,12 +45,12 @@ form {
   margin-bottom: 5px;
   font-weight: 500;
   width: 100%;
-  max-width: 150px; 
+  max-width: 150px; /* Limiter la largeur des champs de saisie */
   padding: 8px;}
 
 .input-group input {
   width: 100%;
-  max-width: 300px; 
+  max-width: 300px; /* Limiter la largeur des champs de saisie */
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -103,26 +65,10 @@ form {
   margin-top: 4px;
 }
 
-
-/* Options */
-.options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  font-size: 14px;
-}
-
-.options a {
-  text-decoration: none;
-  color: #6b21a8;
-}
-
-/* Bouton principal */
 .btn-primary,
 .btn-google {
   width: 100%;
-  max-width: 300px; 
+  max-width: 300px; /* Limiter la largeur des boutons */
   padding: 10px;
   border-radius: 8px;
   font-size: 16px;
@@ -154,30 +100,28 @@ form {
   height: 20px;
 }
 
-
-/* Lien d'inscription */
-.signup-text {
-  margin-top: 30px;
+.login-text {
+  margin-top: 20px;
+  font-size: 14px;
   text-align: center;
-  color: #666;
 }
 
-.signup-text a {
+.login-text a {
   color: #6b21a8;
   text-decoration: none;
 }
 
-.signup-text a:hover {
+.login-text a:hover {
   text-decoration: underline;
 }
 
 /* Footer */
 .footer {
-  margin-top: auto; 
+  margin-top: -30px ; /* Place le footer en bas */
   font-size: 12px;
   color: gray;
   text-align: center;
-  padding: 20px 0; 
+  padding: 10px 0; /* Espacement */
 }
 
 .footer a {
@@ -189,23 +133,36 @@ form {
   text-decoration: underline;
 }
 
-/* Overlay Texte sur l'image */
+/* Partie droite */
+.signup-right {
+  width: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.signup-right img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .overlay {
   position: absolute;
   color: white;
   padding: 40px;
   text-align: left;
-  max-width: 60%;
+  max-width: 80%;
 }
 
 .overlay h1 {
   font-size: 36px;
   margin-bottom: 20px;
-  font-weight: bold;
 }
 
 .overlay p {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   font-size: 16px;
   line-height: 1.5;
 }
@@ -216,4 +173,10 @@ form {
   gap: 10px;
   font-size: 14px;
   font-weight: bold;
+}
+
+.users-join span {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 8px 12px;
+  border-radius: 20px;
 }
