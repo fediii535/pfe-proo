@@ -1,79 +1,39 @@
 import React, { useState } from 'react';
 import './Signup.css';
-import authimage from './assets/outhimage.png';
-import { Link, useNavigate } from 'react-router-dom';
+import authimage from './assets/outhimage.png'; 
+import { Link } from 'react-router-dom';
 import { supabase } from './supabaseClient';
 
 export default function Signup() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
+  const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-
     try {
-      // Sign up the user with Supabase Auth
-      const { user, error: authError } = await supabase.auth.signUp({
+      const { user, error } = await supabase.auth.signUp({
         email,
         password,
-        options: {
-          data: {
-            name, // Save additional user metadata
-          },
-        },
       });
 
-      if (authError) {
-        setError(authError.message);
-        return;
-      }
+      if (error) throw error;
 
-      // Save user information to a custom table (optional)
-      const { data, error: dbError } = await supabase
-        .from('users') // Replace with your table name
-        .insert([{ id: user.id, email, name }]);
-
-      if (dbError) {
-        setError(dbError.message);
-        return;
-      }
-
-      console.log('User signed up and data saved:', user);
-      alert('Check your email for the confirmation link!');
-      navigate('/'); // Redirect to the login page after sign-up
-    } catch (err) {
-      setError('An error occurred during sign-up.');
-      console.error(err);
-    }
-  };
-
-  const handleGoogleSignup = async () => {
-    try {
-      const { user, error } = await supabase.auth.signIn({ provider: 'google' });
-
-      if (error) {
-        setError(error.message);
-      } else {
-        console.log('User signed up with Google:', user);
-        navigate('/sidebar'); // Redirect to the Sidebar page
-      }
-    } catch (err) {
-      setError('An error occurred during Google sign-up.');
-      console.error(err);
+      console.log('User signed up:', user);
+      
+    } catch (error) {
+      console.error('Error signing up:', error.message);
+      setError(error.message);
     }
   };
 
   return (
     <div className="signup-main-container">
-      {/* Left Side: Signup Form */}
+      
       <div className="signup-left">
-        <h1 className="logo">Yuna</h1>
+        <h1 className='logo'>Yuna</h1>
         <h2>Sign Up</h2>
-        {error && <p className="error-message">{error}</p>}
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <label>Name</label>
@@ -85,6 +45,7 @@ export default function Signup() {
               required
             />
           </div>
+
           <div className="input-group">
             <label>Email</label>
             <input
@@ -95,6 +56,7 @@ export default function Signup() {
               required
             />
           </div>
+
           <div className="input-group">
             <label>Password</label>
             <input
@@ -106,30 +68,30 @@ export default function Signup() {
             />
             <small>Must be at least 8 characters.</small>
           </div>
-          <button type="submit" className="btn-primary">
-            Create account
-          </button>
-          <button type="button" className="btn-google" onClick={handleGoogleSignup}>
+
+          {error && <p className="error">{error}</p>}
+
+          <button type="submit" className="btn-primary">Create account</button>
+
+          <button type="button" className="btn-google">
             <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" />
             Sign up with Google
           </button>
+
           <p className="login-text">
             Already have an account? <Link to="/">Login</Link>
           </p>
         </form>
-        <div className="footer">
-          © SoftyEducation | <a href="mailto:help@SoftyEducation.com">help@SoftyEducation.com</a>
+        <div className='footer'>
+          © SoftyEducation | <a href='mailto:help@SoftyEducation.com'>help@SoftyEducation.com</a>
         </div>
       </div>
 
-      {/* Right Side: Image + Text */}
+      
       <div className="signup-right">
         <div className="overlay">
           <h1>Lorem Ipsum is simply dummy text</h1>
-          <p>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. To complement
-            us best, the industry is certified.
-          </p>
+          <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. To complement us best, the industry is certified.</p>
           <div className="users-join">
             <span>40,000+ letters</span>
             <span>20,000+ letters</span>

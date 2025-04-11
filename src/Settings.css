@@ -1,0 +1,127 @@
+.profile-settings {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.profile-settings h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.profile-settings h2 {
+  font-size: 20px;
+  margin: 25px 0 15px 0;
+  color: #444;
+}
+
+.profile-description {
+  margin-bottom: 20px;
+  color: #666;
+}
+
+.form-section {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.form-row {
+  display: flex;
+  padding: 15px;
+}
+
+.label-col {
+  flex: 1;
+  padding-right: 20px;
+}
+
+.input-col {
+  flex: 2;
+}
+
+.form-row label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.description {
+  font-size: 14px;
+  color: #666;
+  margin: 5px 0 0 0;
+}
+
+.input-field {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.upload-area {
+  border: 2px dashed #ddd;
+  border-radius: 4px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  
+}
+
+.upload-area:hover {
+  border-color: #aaa;
+}
+
+.file-types {
+  font-size: 12px;
+  color: #999;
+  margin-top: 5px;
+}
+
+.divider-line {
+  height: 1px;
+ 
+  margin: 0;
+}
+
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.save-button, .cancel-button {
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.save-button {
+  background-color: #4CAF50;
+  
+  border: none;
+}
+
+.cancel-button {
+  
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.divider {
+  height: 1px;
+  
+  margin: 30px 0;
+}
+
+.settings h2 {
+  margin-top: 0;
+}

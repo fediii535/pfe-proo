@@ -88,8 +88,8 @@ form {
 
 .input-group input {
   width: 100%;
-  max-width: 300px; 
-  padding: 8px;
+  ;
+  padding: 2px;
   border: 1px solid #ccc;
   border-radius: 8px;
   box-sizing: border-box;

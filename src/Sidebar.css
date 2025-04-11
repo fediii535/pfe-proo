@@ -1,77 +1,206 @@
-.sidebar {
-  width: 250px;
-  height: 100vh;
-  background-color: #2c3e50;
-  color: white;
+/* Style général du layout */
+.dashboard-layout {
   display: flex;
-  flex-direction: column;
+  height: 50vh;
 }
 
-.sidebar-header {
+/* Sidebar */
+.sidebar {
+  position: fixed; /* Fix the sidebar in place */
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100vh; /* Full viewport height */
+  overflow: hidden; /* Prevent scrolling within the sidebar */
+  
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  border-bottom: 1px solid #34495e;
+}
+
+.sidebar-container {
+  width: 250px;
+  height: 100vh;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+/* Logo */
+.sidebar-header {
+  text-align: center;
+  padding-bottom: 20px;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #6e9dbf;
+}
+
+.sidebar-logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #6b46c1;
+  margin-bottom: 24px;
   text-align: center;
 }
 
-.logo img {
-  width: 50px;
-  height: auto;
-}
-
+/* Menu */
 .sidebar-menu {
   flex: 1;
-  padding: 20px;
+}
+
+.sidebar-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .menu-item {
-  padding: 10px 0;
-  cursor: pointer;
   display: flex;
   align-items: center;
+  padding: 12px;
+  margin: 5px 0;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition:  0.3s ease;
 }
 
-.menu-item:hover {
-  background-color: #34495e;
-}
-
-.icon {
+.menu-item .icon {
   margin-right: 10px;
+  font-size: 18px;
 }
 
-.count {
-  margin-left: auto;
-  background-color: #e74c3c;
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 0.8em;
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  color: #4a5568;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-.sidebar-footer {
-  padding: 20px;
-  border-top: 1px solid #34495e;
+.sidebar-item:hover {
+  background-color: #e9d8fd;
+  color: #6b46c1;
 }
 
-.user-info {
-  text-align: center;
+.sidebar-item a {
+  text-decoration: none;
+  color: inherit;
+  flex-grow: 1;
 }
 
-.user-name {
+.sidebar-badge {
+  background-color: #e9d8fd;
+  color: #fff;
+  font-size: 12px;
   font-weight: bold;
+  border-radius: 12px;
+  padding: 2px 8px;
+  position: absolute;
+  right: 16px;
 }
 
-.user-email {
-  font-size: 0.8em;
-  color: #bdc3c7;
+/* Footer */
+.sidebar-footer {
+  border-top: 1px solid #ddd;
+  padding-top: 10px;
 }
 
 .logout {
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin-top: 10px;
+  padding: 12px;
+  font-size: 16px;
   cursor: pointer;
+  border-radius: 8px;
+  transition: color 0.3s ease,  0.3s ease;
 }
 
 .logout:hover {
-  color: #e74c3c;
+  background-color: #ffe6e6;
+  color: #d9534f;
+}
+
+.sidebar-settings {
+  margin-top: auto;
+}
+
+.sidebar-settings-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #f7fafc;
+  padding: 10px;
+  border-radius: 8px;
+  color: #6b46c1;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.sidebar-settings-btn:hover {
+  background-color: #e9d8fd;
+  color: #fff;
+}
+
+.sidebar-user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.sidebar-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #e2e8f0;
+}
+
+.sidebar-user-details {
+  flex-grow: 1;
+}
+
+.sidebar-user-name {
+  font-weight: bold;
+  color: #2d3748;
+}
+
+.sidebar-user-email {
+  font-size: 12px;
+  color: #718096;
+}
+
+.sidebar-logout {
+  color: #718096;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.sidebar-logout:hover {
+  color: #6b46c1;
+}
+
+/* Contenu principal */
+.main-content {
+  margin-left: 250px; /* Adjust for the fixed sidebar width */
+  overflow-y: auto; /* Allow scrolling for the main content */
+  height: 100vh; /* Ensure it takes the full height */
+  
+  flex: 1;
+  padding: 20px;
+  
 }

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+  <link rel="stylesheet" href="./Home.css">
+</head>
+<body>
+  <div class="home-container">
+    <div class="sidebar">
+      <div class="profile-section">
+        <div class="profile-picture">
+          <!-- Placeholder for profile picture -->
+          <div style="width: 80px; height: 80px; background: #f3f4f6; border-radius: 50%; margin: 0 auto;"></div>
+        </div>
+        <h3>Farouk Abichou</h3>
+        <p>Software Developer</p>
+        <div class="profile-actions">
+          <button class="settings-btn">Settings</button>
+          <button class="view-profile-btn">View profile</button>
+        </div>
+      </div>
+      <div class="balance-section">
+        <h3>Balance</h3>
+        <div class="balance-value">16</div>
+        <button class="apply-btn">Apply for leave</button>
+      </div>
+    </div>
+    <div class="main-content">
+      <h1 class="page-title">Home</h1>
+      <div class="leave-balance-cards">
+        <div class="card">
+          <div class="card-header">
+            <span>Vacation</span>
+            <span class="card-icon sun">☀️</span>
+          </div>
+          <div class="card-content">
+            <div class="card-value">10</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span>Casual</span>
+            <span class="card-icon alert">⚠️</span>
+          </div>
+          <div class="card-content">
+            <div class="card-value">2</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span>Personal</span>
+            <span class="card-icon lock">🔒</span>
+          </div>
+          <div class="card-content">
+            <div class="card-value">1</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span>Sick</span>
+            <span class="card-icon medical">🚑</span>
+          </div>
+          <div class="card-content">
+            <div class="card-value">3</div>
+          </div>
+        </div>
+      </div>
+      <div class="latest-leaves">
+        <h2>Latest Leaves</h2>
+        <table class="leaves-table">
+          <thead>
+            <tr>
+              <th><input type="checkbox"></th>
+              <th>Submission Date</th>
+              <th>From - To</th>
+              <th>Type</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="checkbox"></td>
+              <td>02/19/2025 22:52</td>
+              <td>02/19/2025 to 04/19/2025</td>
+              <td class="leave-type"><span class="card-icon sun">☀️</span> Vacation</td>
+              <td><span class="status pending">Pending</span></td>
+            </tr>
+            <!-- Repeat rows as needed -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,211 @@
+.job-create-container { 
+  padding: 40px;
+  font-family: Arial, sans-serif;
+  background-color: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align items to the left */
+  margin-left: 20px; /* Shift the container slightly to the right */
+}
+
+.job-create-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin-bottom: 20px;
+}
+
+.job-create-header h1 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.export-btn {
+  background-color: #6A5ACD;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.job-create-form {
+  background-color: white;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 1200px;
+}
+
+.form-header {
+  text-align: left; /* Align text to the left */
+  margin-bottom: 20px; /* Add spacing below the header */
+}
+
+.form-header h2 {
+  font-size: 20px; /* Adjust font size */
+  font-weight: bold; /* Keep bold text */
+  color: #333; /* Change text color */
+  margin-bottom: 5px; /* Add spacing below the title */
+  margin-right: 950px;
+}
+
+.form-header p {
+  font-size: 14px; /* Adjust font size */
+  color: #666; /* Keep the gray color */
+  margin: 0; /* Remove extra margin */
+}
+
+.form-group {
+  display: flex; /* Use flexbox for alignment */
+  align-items: center; /* Align items vertically */
+  gap: 20px; /* Add spacing between label and input */
+  margin-bottom: 20px;
+  width: 100%;
+  padding-left: 20px; /* Shift content slightly to the right */
+}
+
+.divider + .form-group {
+  margin-top: 10px; /* Add spacing below the divider */
+}
+
+.form-group label {
+  width: 150px; /* Set a fixed width for the label */
+  font-weight: bold; /* Keep bold text */
+  margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: white;
+}
+
+.form-group input#job-name {
+  width: 512px; /* Set width */
+  height: 44px; /* Set height */
+  border: 1px solid #D0D5DD; /* Apply border color */
+  border-radius: 8px; /* Set border radius */
+  padding: 10px 14px; /* Apply padding */
+  background-color: #FFFFFF; /* Set background color */
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05); /* Add shadow */
+}
+
+.form-group textarea#description {
+  width: 512px; /* Set width */
+  height: 128px; /* Set height */
+  border: 1px solid #D0D5DD; /* Apply border color */
+  border-radius: 8px; /* Set border radius */
+  padding: 10px 14px; /* Apply padding */
+  background-color: #FFFFFF; /* Set background color */
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05); /* Add shadow */
+}
+
+.character-count {
+  width: 512px; /* Match the input width */
+  height: 20px; /* Set height */
+  font-family: 'Inter', sans-serif; /* Set font family */
+  font-weight: 400; /* Set font weight */
+  font-size: 14px; /* Set font size */
+  line-height: 20px; /* Set line height */
+  color: #667085; /* Set text color */
+  margin-top: 4px; /* Adjust spacing to match the image */
+  text-align: right; /* Align text to the right */
+}
+
+.file-upload {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.file-preview {
+  width: 80px;
+  height: 80px;
+  background-color: #6A5ACD;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+.placeholder-circle {
+  width: 80px;
+  height: 80px;
+  background-color: #6A5ACD;
+  border-radius: 50%;
+}
+
+.job-image-preview {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.upload-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: 2px dashed #ccc;
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 100%;
+  background-color: white;
+}
+
+.upload-label p {
+  font-size: 14px;
+  font-weight: bold;
+  color: #6A5ACD;
+}
+
+.upload-label span {
+  font-size: 12px;
+  color: #666;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.cancel-btn {
+  background-color: transparent;
+  color: #6A5ACD;
+  border: 1px solid #6A5ACD;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.save-btn {
+  background-color: #6A5ACD;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.divider {
+  width: 1133px; /* Set width */
+  height: 1px; /* Set height */
+  background-color: #EAECF0; /* Set color */
+  margin: 20px 0; /* Add vertical spacing */
+}

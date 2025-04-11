@@ -1,0 +1,573 @@
+.apply-btn {
+  background: #7f56d9; /* Purple background */
+  color: #ffffff; /* White text color */
+  border: 1px solid #7f56d9; /* Purple border */
+  border-radius: 8px; /* Rounded corners */
+  padding: 12px 20px; /* Adjusted padding */
+  font-size: 16px; /* Font size */
+  font-weight: 600; /* Semi-bold font weight */
+  text-align: center; /* Center text */
+  cursor: pointer;
+  box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05); /* Subtle shadow */
+  width: 100%; /* Full width button */
+}
+
+.home-container {
+    display: flex;
+  justify-content: space-between; /* Spread content across the container */
+  align-items: flex-start; /* Align items at the top */
+  background-color: #fff; /* Background color */
+  overflow: hidden; /* Prevent overflow */
+}
+
+.main-content {
+  flex: 1; /* Allow the main content to stretch */
+  max-width: 1400px; /* Increase the maximum width */
+  padding: 20px; /* Add padding for spacing */
+  margin: 0 auto; /* Center the content horizontally */
+}
+
+.page-title-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px; /* Add spacing below the title */
+}
+
+.page-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: #111827;
+  margin: 0;
+}
+
+.search-icon {
+  position: absolute; /* Position the search icon */
+  top: 20px; /* Add spacing from the top */
+  right: 20px; /* Align to the right */
+  font-size: 24px; /* Adjust icon size */
+  color: #6b7280; /* Gray color for the icon */
+  cursor: pointer;
+  z-index: 10; /* Ensure it appears above other elements */
+}
+
+.leave-balance-cards {
+  display: flex; /* Use flexbox for horizontal alignment */
+  gap: 20px; /* Add spacing between cards */
+  margin-bottom: 20px; /* Add spacing below the cards */
+  flex-wrap: nowrap; /* Prevent wrapping to the next line */
+  justify-content: space-evenly; /* Spread cards evenly across the row */
+  width: 100%; /* Stretch cards to fill available space */
+}
+
+.card {
+  position: relative; /* Enable positioning for the three dots */
+  background: white;
+  border: 1px solid #e5e7eb; /* Light gray border */
+  border-radius: 4.96px; /* Adjusted border radius */
+  padding: 10px; /* Adjust padding for better spacing */
+  box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05); /* Subtle shadow */
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start; /* Align content to the left */
+  width: 250px; /* Adjusted width for a rectangular shape */
+  height: 100px; /* Slightly increased height for better spacing */
+  gap: 14.87px; /* Adjusted gap */
+  overflow: hidden; /* Prevent content from overflowing the card */
+  text-overflow: ellipsis; /* Add ellipsis for overflowing text */
+  white-space: nowrap; /* Prevent text wrapping */
+  box-sizing: border-box; /* Include padding and border in the width/height */
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between; /* Ensure space between title and dots */
+  align-items: center; /* Align items vertically */
+  margin-bottom: 10px;
+  font-size: 14px; /* Smaller font size for the title */
+  font-weight: 500; /* Medium font weight */
+  color: #6b7280; /* Gray text color */
+}
+
+.card-header .menu-dots {
+  margin-left: 100px; /* Further increased spacing between the text and the three dots */
+  font-size: 18px; /* Adjust size if needed */
+  color: #9ca3af; /* Light gray color */
+  cursor: pointer;
+}
+
+.card-content {
+  display: flex;
+  align-items: center; /* Align icon and number vertically */
+  justify-content: space-between; /* Space between number and icon */
+  flex-direction: row-reverse; /* Reverse the order to place the icon on the right */
+  width: 100%; /* Ensure content spans the card width */
+  overflow: hidden; /* Prevent content from overflowing */
+  text-overflow: ellipsis; /* Add ellipsis for overflowing text */
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+.card-value {
+  font-size: 32px; /* Larger font size for the number */
+  font-weight: 700; /* Bold font weight */
+  color: #111827; /* Dark text color */
+}
+
+.card-icon {
+  width: 30px; /* Reduced width */
+  height: 30px; /* Reduced height */
+  background-color: #fef3c7; /* Light orange background */
+  color: #f59e0b; /* Orange icon color */
+  border-radius: 50%; /* Circular shape */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px; /* Reduced font size */
+  box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05); /* Subtle shadow */
+}
+
+.card-icon.sun {
+  background-color: transparent; /* Removed background color */
+  color: #f59e0b; /* Updated icon color to orange */
+  border-radius: 50%; /* Circular shape */
+  padding: 12px; /* Adjust padding for better spacing */
+  font-size: 24px; /* Icon size */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: none; /* Removed shadow */
+}
+
+.card-icon.alert {
+  background-color: transparent; /* Removed background color */
+  color: #a855f7; /* Updated icon color to purple */
+  border-radius: 50%; /* Circular shape */
+  padding: 12px; /* Adjust padding for better spacing */
+  font-size: 24px; /* Icon size */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: none; /* Removed shadow */
+}
+
+.card-icon.lock {
+  background-color: transparent; /* Removed background color */
+  color: #3b82f6; /* Updated icon color to blue */
+  border-radius: 50%; /* Circular shape */
+  padding: 12px; /* Adjust padding for better spacing */
+  font-size: 24px; /* Icon size */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: none; /* Removed shadow */
+}
+
+.card-icon.medical {
+  background-color: transparent; /* Removed background color */
+  color: #f87171; /* Updated icon color to red */
+  border-radius: 50%; /* Circular shape */
+  padding: 12px; /* Adjust padding for better spacing */
+  font-size: 24px; /* Icon size */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: none; /* Removed shadow */
+}
+
+.card-icon.vacation {
+  background-color: #eaf8ff; /* Light blue background */
+  color: #1d4ed8; /* Blue icon color */
+  border-radius: 50%; /* Circular shape */
+  padding: 12px; /* Adjusted padding */
+  font-size: 24px; /* Icon size */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 0.62px 1.24px rgba(16, 24, 40, 0.06), 
+              0px 0.62px 1.86px rgba(16, 24, 40, 0.1); /* Subtle shadow */
+}
+
+.card-icon.casual {
+  background-color: #fefce8; /* Light yellow background */
+  color: #f59e0b; /* Yellow icon color */
+  border-radius: 50%; /* Circular shape */
+  padding: 12px; /* Adjusted padding */
+  font-size: 24px; /* Icon size */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 0.62px 1.24px rgba(16, 24, 40, 0.06), 
+              0px 0.62px 1.86px rgba(16, 24, 40, 0.1); /* Subtle shadow */
+}
+
+.card-icon.personal {
+  background-color: #fef2f2; /* Light red background */
+  color: #dc2626; /* Red icon color */
+  border-radius: 50%; /* Circular shape */
+  padding: 12px; /* Adjusted padding */
+  font-size: 24px; /* Icon size */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 0.62px 1.24px rgba(16, 24, 40, 0.06), 
+              0px 0.62px 1.86px rgba(16, 24, 40, 0.1); /* Subtle shadow */
+}
+
+.card-icon.sick {
+  background-color: #ecfdf5; /* Light green background */
+  color: #059669; /* Green icon color */
+  border-radius: 50%; /* Circular shape */
+  padding: 12px; /* Adjusted padding */
+  font-size: 24px; /* Icon size */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 0.62px 1.24px rgba(16, 24, 40, 0.06), 
+              0px 0.62px 1.86px rgba(16, 24, 40, 0.1); /* Subtle shadow */
+}
+
+.latest-leaves {
+  width: 100%; /* Full width */
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 20px; /* Add spacing above the section */
+  text-align: left;
+  overflow-x: auto; /* Prevent horizontal overflow */
+  max-width: 800px; /* Limit the maximum width */
+  margin-left: 0; /* Align to the left */
+}
+
+.latest-leaves-header {
+  display: flex;
+  justify-content: space-between; /* Ensure space between title and search icon */
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.search-icon {
+  font-size: 20px;
+  color: #6b7280; /* Gray color for the icon */
+  cursor: pointer;
+  margin-left: auto; /* Align the search icon to the right */
+}
+
+.latest-leaves h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0; /* Remove extra margin */
+}
+
+.leaves-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.leaves-table th,
+.leaves-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.leaves-table th {
+  background-color: #f9fafb;
+  font-weight: 600;
+}
+
+.leave-type {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.leave-type .vacation {
+  background-color: #fffaeb; /* Light yellow background */
+  color: #b54708; /* Warning text color */
+  padding: 2px 8px 2px 6px; /* Top, Right, Bottom, Left padding */
+  border-radius: 16px; /* Rounded corners */
+  font-size: 12px; /* Font size */
+  font-weight: 500; /* Medium font weight */
+  line-height: 22px; /* Line height */
+  text-align: center; /* Center alignment */
+}
+
+.status {
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.status.pending {
+  background: #fff4e5;
+  color: #ffa500;
+}
+
+.status.approved {
+  background: #e6ffed; /* Light green background */
+  color: #10b981; /* Green text */
+}
+
+.status.rejected {
+  background: #ffe6e6; /* Light red background */
+  color: #ef4444; /* Red text */
+}
+
+.sidebar {
+  position: relative; /* Ensure proper positioning */
+  top: 0; /* Stick to the top */
+  right: 0; /* Align to the right */
+  width: 296px; /* Fixed width as per the image */
+  background: #fff; /* White background */
+  padding: 40px 32px; /* Top and right padding as per the image */
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow on the left */
+  display: flex;
+  flex-direction: column;
+  gap: 24px; /* Spacing between elements */
+}
+
+.profile-section {
+  margin-top: 20px; /* Adjust spacing */
+  text-align: center; /* Center align text */
+  position: relative; /* Enable positioning for the search icon */
+  gap: 10px; /* Add spacing between elements */
+  box-shadow: none; /* Remove shadow */
+}
+
+.profile-section .search-icon {
+  position: absolute; /* Position the search icon */
+  top: -10px; /* Move the search icon higher */
+  right: -10px; /* Move the search icon to the right corner */
+  font-size: 20px; /* Adjust icon size */
+  color: #6b7280; /* Gray color for the icon */
+  cursor: pointer;
+}
+
+.profile-picture {
+  width: 100px; /* Fixed width for the profile picture */
+  height: 100px; /* Fixed height for the profile picture */
+  border-radius: 50%; /* Circular shape */
+  border: 4px solid #fff; /* White border */
+  margin-bottom: 10px; /* Add spacing below the picture */
+  font-size: 100px;
+  color: #6b7280; /* Gray for profile icon */
+}
+
+.profile-section h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827; /* Dark text */
+}
+
+.profile-section p {
+  font-size: 14px;
+  color: #6b7280; /* Gray text */
+}
+
+.profile-actions {
+  display: flex;
+  justify-content: center; /* Center align buttons */
+  gap: 10px; /* Spacing between buttons */
+  margin-top: 10px;
+}
+
+.view-profile-btn {
+  background: #7f56d9; /* Purple background */
+  color: #ffffff; /* White text color */
+  border: 1px solid #7f56d9; /* Purple border */
+  border-radius: 8px; /* Rounded corners */
+  padding: 10px 16px; /* Adjusted padding */
+  font-size: 14px; /* Font size */
+  font-weight: 500; /* Medium font weight */
+  text-align: center; /* Center text */
+  cursor: pointer;
+  box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05); /* Subtle shadow */
+}
+
+.balance-section-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px; /* Spacing between buttons and the card */
+  width: 296px; /* Fixed width */
+  padding: 40px 32px; /* Top and right padding */
+  gap: 24px; /* Spacing between elements */
+}
+
+.balance-section {
+  background: white;
+  border-radius: 10px; /* Rounded corners */
+  padding: 20px; /* Add padding */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  display: flex;
+  justify-content: space-between; /* Space between balance and icon */
+  align-items: center; /* Align items vertically */
+}
+
+.balance-section h3 {
+  font-size: 16px; /* Adjust font size */
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.balance-value {
+  font-size: 36px; /* Large font size for balance */
+  font-weight: bold; /* Bold font */
+  color: #111827; /* Dark text color */
+  margin-top: 5px; /* Add spacing below the title */
+}
+
+.balance-section .menu-dots {
+  position: absolute;
+  top: 15px; /* Adjust position */
+  right: 15px; /* Adjust position */
+  font-size: 16px; /* Adjust font size */
+  color: #9ca3af; /* Light gray color */
+  cursor: pointer;
+}
+
+.balance-icon {
+  font-size: 24px; /* Icon size */
+  color: #111827; /* Icon color */
+  background-color: #d1fae5; /* Light green background */
+  border-radius: 50%; /* Circular shape */
+  padding: 10px; /* Padding inside the icon */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px; /* Add spacing below the three dots */
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.modal p {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.hint-text {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 5px;
+}
+
+.error-text {
+  font-size: 12px;
+  color: #ef4444;
+  margin-top: 5px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.cancel-btn {
+  background: #f3f4f6;
+  color: #111827;
+  border: 1px solid #d1d5db;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.apply-btn {
+  background: #7f56d9; /* Purple background */
+  color: #ffffff; /* White text color */
+  border: 1px solid #7f56d9; /* Purple border */
+  border-radius: 8px; /* Rounded corners */
+  padding: 12px 20px; /* Adjusted padding */
+  font-size: 16px; /* Font size */
+  font-weight: 600; /* Semi-bold font weight */
+  text-align: center; /* Center text */
+  cursor: pointer;
+  box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05); /* Subtle shadow */
+  width: 100%; /* Full width button */
+}
+
+.icon {
+  margin-right: 5px;
+  font-size: 16px;
+}
+
+.date-range {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.date-range input[type="date"] {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.settings-btn {
+  background: #ffffff; /* White background */
+  color: #344054; /* Dark gray text color */
+  border: 1px solid #d0d5dd; /* Light gray border */
+  border-radius: 8px; /* Rounded corners */
+  padding: 6px 12px; /* Adjusted padding */
+  font-size: 14px; /* Font size */
+  font-weight: 500; /* Medium font weight */
+  text-align: center; /* Center text */
+  cursor: pointer;
+  box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05); /* Subtle shadow */
+}
