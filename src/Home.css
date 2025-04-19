@@ -13,11 +13,13 @@
 }
 
 .home-container {
-    display: flex;
-  justify-content: space-between; /* Spread content across the container */
-  align-items: flex-start; /* Align items at the top */
-  background-color: #fff; /* Background color */
-  overflow: hidden; /* Prevent overflow */
+  position: absolute;
+  inset: 0;
+  margin-left: 18rem; /* Maintain spacing from the sidebar */
+  padding: 2rem; /* Adjusted padding for better spacing */
+  background: white; /* Ensure the container has a white background */
+  border-radius: 0.5rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
 }
 
 .main-content {
@@ -320,17 +322,19 @@
   color: #ef4444; /* Red text */
 }
 
-.sidebar {
-  position: relative; /* Ensure proper positioning */
-  top: 0; /* Stick to the top */
-  right: 0; /* Align to the right */
-  width: 296px; /* Fixed width as per the image */
+.sidebar1 {
+  position: fixed; /* Fix the sidebar to the viewport */
+  top: 0; /* Align to the top of the page */
+  right: 0; /* Align to the right of the page */
+  width: 296px; /* Fixed width for the sidebar */
+  height: 100%; /* Full height of the viewport */
   background: #fff; /* White background */
-  padding: 40px 32px; /* Top and right padding as per the image */
+  padding: 40px 32px; /* Padding inside the sidebar */
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow on the left */
   display: flex;
   flex-direction: column;
   gap: 24px; /* Spacing between elements */
+  z-index: 1000; /* Ensure it appears above other content */
 }
 
 .profile-section {

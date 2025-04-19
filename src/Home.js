@@ -163,7 +163,7 @@ const Home = () => {
       </div>
 
       {/* Sidebar moved to the right */}
-      <div className="sidebar">
+      <div className="sidebar1">
         <div className="profile-section">
           <User className="profile-picture" />
           <Search className="search-icon" /> {/* Moved search icon here */}
