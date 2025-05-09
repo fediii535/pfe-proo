@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Signup.css';
-import authimage from './assets/outhimage.png'; 
-import { Link } from 'react-router-dom';
+import authimage from './assets/outhimage.png';
+import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from './supabaseClient';
 
 export default function Signup() {
@@ -9,28 +9,71 @@ export default function Signup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); // Empêche les soumissions multiples
+  const [attempts, setAttempts] = useState(0); // Suivi des tentatives
+
+  const navigate = useNavigate();
+
+  // Fonction pour introduire un délai
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Empêche la soumission si le formulaire est déjà en cours
+    if (isLoading) return;
+
+    setIsLoading(true); // Démarre le chargement
+    setAttempts((prev) => prev + 1); // Compte les tentatives d'inscription
+
+    // Limite les tentatives d'inscription
+    if (attempts >= 3) {
+      setError('Trop de tentatives. Veuillez réessayer plus tard.');
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      const { user, error } = await supabase.auth.signUp({
-        email,
-        password,
-      });
+      await delay(5000); // Attendre 5 secondes avant de soumettre pour éviter la limitation
 
-      if (error) throw error;
+      // 1. Création du compte utilisateur avec Supabase Auth
+      const { data, error } = await supabase.auth.signUp(
+        {
+          email,
+          password,
+          options: {
+            data: {
+              first_name: name,
+              
+            }
+          }
+        }
+      )
 
-      console.log('User signed up:', user);
-      
+      // Gestion des erreurs
+      if (error) {
+        if (error.message.includes('rate limit exceeded')) {
+          setError('Trop de tentatives. Veuillez réessayer plus tard.');
+        } else {
+          setError(error.message);
+        }
+        throw error;
+      }
+
+      alert('Compte créé avec succès ! Veuillez vérifier votre email pour confirmation.');
+
+      // 2. Rediriger vers la page de connexion
+      navigate('/');
     } catch (error) {
-      console.error('Error signing up:', error.message);
+      console.error('Erreur lors de l\'inscription :', error.message);
       setError(error.message);
+    } finally {
+      setIsLoading(false); // Fin du chargement
     }
   };
 
   return (
     <div className="signup-main-container">
-      
       <div className="signup-left">
         <h1 className='logo'>Yuna</h1>
         <h2>Sign Up</h2>
@@ -69,9 +112,11 @@ export default function Signup() {
             <small>Must be at least 8 characters.</small>
           </div>
 
-          {error && <p className="error">{error}</p>}
+          {error && <p className="error">{error}</p>} {/* Affiche les erreurs */}
 
-          <button type="submit" className="btn-primary">Create account</button>
+          <button type="submit" className="btn-primary" disabled={isLoading}>
+            {isLoading ? 'Creating account...' : 'Create account'}
+          </button>
 
           <button type="button" className="btn-google">
             <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" />
@@ -82,12 +127,12 @@ export default function Signup() {
             Already have an account? <Link to="/">Login</Link>
           </p>
         </form>
+
         <div className='footer'>
           © SoftyEducation | <a href='mailto:help@SoftyEducation.com'>help@SoftyEducation.com</a>
         </div>
       </div>
 
-      
       <div className="signup-right">
         <div className="overlay">
           <h1>Lorem Ipsum is simply dummy text</h1>

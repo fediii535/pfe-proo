@@ -1,148 +1,178 @@
 import React, { useState } from 'react';
-import './JobCreate.css';
-import { FaSearch } from 'react-icons/fa';
+import './Settings.css';
+import { Input, Dropdown, Menu, Select, DatePicker } from 'antd'; // Import DatePicker from antd
+import { DownOutlined } from '@ant-design/icons';
 
-const JobCreate = () => {
+const Settings = () => {
+  const [selectedDepartment, setSelectedDepartment] = useState('Create your department');
   const [jobName, setJobName] = useState('');
   const [description, setDescription] = useState('');
-  const [jobPicture, setJobPicture] = useState(null);
-  const [openSeats, setOpenSeats] = useState(1);
+  const [openSeats, setOpenSeats] = useState(null);
+  const [department, setDepartment] = useState(null);
+  const [deadline, setDeadline] = useState(null);
+  const [errors, setErrors] = useState({}); // State for field errors
 
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setJobPicture(URL.createObjectURL(file));
+  const handleMenuClick = (e) => {
+    setSelectedDepartment(e.key);
+  };
+
+  const handleSave = () => {
+    const newErrors = {};
+    if (!jobName) newErrors.jobName = 'Job name is required';
+    if (!description) newErrors.description = 'Description is required';
+    if (!openSeats) newErrors.openSeats = 'Number of open seats is required';
+    if (!department) newErrors.department = 'Department is required';
+    if (!deadline) newErrors.deadline = 'Deadline is required';
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length === 0) {
+      console.log('Form submitted successfully');
+      // Add form submission logic here
     }
   };
 
+  const menu = (
+    <Menu onClick={handleMenuClick}>
+      <Menu.Item key="Marketing">Marketing</Menu.Item>
+      <Menu.Item key="Development">Development</Menu.Item>
+      <Menu.Item key="Design">Design</Menu.Item>
+    </Menu>
+  );
+
+  // Options for Number Of Open Seats
+  const openSeatsOptions = Array.from({ length: 100 }, (_, i) => ({
+    value: (i + 1).toString(),
+    label: (i + 1).toString(),
+  }));
+
+  // Options for Department
+  const departmentOptions = [
+    { value: 'Marketing', label: 'Marketing' },
+    { value: 'Design', label: 'Design' },
+    { value: 'Developer', label: 'Developer' },
+  ];
+
+  const handleChange = (value) => {
+    console.log(`selected ${value}`); // Corrected syntax
+  };
+
   return (
-    <div className="job-create-container">
-      <header className="job-create-header">
-        <h1>Create</h1>
-      </header>
+    <div className="profile-settings">
+      <h1>Create Job</h1>
 
-      <form className="job-create-form">
-        <div className="form-header">
-          <h2>Personal Info</h2>
-          <p>Update your photo and personal details here.</p>
-        </div>
+      <section className="company-profile">
+        <h2 style={{ textAlign: 'left' }}>Personal Info </h2>
+        <p className="profile-description">Update your company photo and details here.</p>
 
-        <div className="divider"></div> {/* Divider above Job Name */}
-        <div className="form-group">
-          <label htmlFor="job-name">Job Name</label>
-          <input
-            type="text"
-            id="job-name"
-            placeholder="UI/UX design"
-            value={jobName}
-            onChange={(e) => setJobName(e.target.value)}
-          />
-        </div>
-        <div className="divider"></div> {/* Divider below Job Name */}
-
-        <div className="form-group">
-          <label htmlFor="description">Description</label>
-          <textarea
-            id="description"
-            placeholder="Write a short introduction."
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-          <p className="character-count">{275 - description.length} characters left</p>
-        </div>
-        <div className="divider"></div> {/* Divider below Description */}
-
-        <div className="form-group">
-          <label htmlFor="department">Department</label>
-          <select id="department">
-            <option>Design</option>
-            {/* Add more options as needed */}
-          </select>
-        </div>
-        <div className="divider"></div> {/* Divider below Department */}
-
-        <div className="form-group">
-          <label>Choose Job Picture</label>
-          <p className="helper-text">This will be displayed on Job profile.</p>
-          <div className="file-upload">
-            <div className="file-preview">
-              {jobPicture ? (
-                <img src={jobPicture} alt="Job" />
-              ) : (
-                <div className="placeholder-circle"></div>
-              )}
+        <div className="form-section">
+          {/* Job Name */}
+          <div className="form-row">
+            <div className="label-col">
+              <label>Job Name</label>
             </div>
-            <label htmlFor="job-picture" className="upload-label">
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15"
-                  stroke="#6A5ACD"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M17 8L12 3L7 8"
-                  stroke="#6A5ACD"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M12 3V15"
-                  stroke="#6A5ACD"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              <p>Click to upload or drag and drop</p>
-              <span>SVG, PNG, JPG or GIF (max. 800x400px)</span>
+            <div className="input-col">
               <input
-                type="file"
-                id="job-picture"
-                accept="image/*"
-                onChange={handleFileUpload}
-                style={{ display: 'none' }}
+                type="text"
+                className="input-field"
+                placeholder="Create your Job name"
+                value={jobName}
+                onChange={(e) => setJobName(e.target.value)}
               />
-            </label>
+              {errors.jobName && <p className="error-message">{errors.jobName}</p>}
+            </div>
+          </div>
+
+          <div className="divider-line"></div>
+
+          {/* Description */}
+          <div className="form-row">
+            <div className="label-col">
+              <label>Description</label>
+              <p className="description">Write a short introduction</p>
+            </div>
+            <div className="input-col">
+              <textarea
+                className="input-field"
+                placeholder="Write a short description"
+                rows="4"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              ></textarea>
+              {errors.description && <p className="error-message">{errors.description}</p>}
+            </div>
+          </div>
+
+          <div className="divider-line"></div>
+
+          {/* Profile Picture Upload */}
+          <div className="form-row">
+            <div className="label-col">
+              <label>Choose Job Picture</label>
+              <p className="description">This will be displayed on job profile.</p>
+            </div>
+            <div className="input-col">
+              <div className="avatar-upload">
+                <div className="avatar-preview"></div> {/* Circle on the left */}
+                <div className="upload-area">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 16V8M12 8L8 12M12 8L16 12M20 16C20 18.2091 18.2091 20 16 20H8C5.79086 20 4 18.2091 4 16C4 13.7909 5.79086 12 8 12H9" 
+                      stroke="#6941C6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  <p>Click to upload <span>or drag and drop</span></p>
+                  <p className="file-types">SVG, PNG, JPG or GIF (max. 800×400px)</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="divider-line"></div>
+
+          {/* Number of Open Seats, Department, Deadline */}
+          <div className="form-row">
+            <div className="label-col">
+              <label>Number Of Open Seats</label> <br />
+              <label>Department</label> <br />
+              <label>Deadline</label>
+            </div>
+            <div className="input-col">
+              <Select
+                className="input-field no-border"
+                placeholder="Enter Number Of Open Seats"
+                onChange={(value) => setOpenSeats(value)}
+                options={openSeatsOptions}
+              />
+              {errors.openSeats && <p className="error-message">{errors.openSeats}</p>}
+              <br />
+              <Select
+                className="input-field no-border"
+                placeholder="Enter Department"
+                onChange={(value) => setDepartment(value)}
+                options={departmentOptions}
+              />
+              {errors.department && <p className="error-message">{errors.department}</p>}
+              <br />
+              <DatePicker
+                className="input-field"
+                placeholder="Select Deadline"
+                format="YYYY/MM/DD"
+                onChange={(date, dateString) => setDeadline(dateString)}
+              />
+              {errors.deadline && <p className="error-message">{errors.deadline}</p>}
+            </div>
           </div>
         </div>
-        <div className="divider"></div> {/* Divider below Choose Job Picture */}
 
-        <div className="form-group">
-          <label htmlFor="open-seats">Number of Open Seats</label>
-          <select
-            id="open-seats"
-            value={openSeats}
-            onChange={(e) => setOpenSeats(e.target.value)}
-          >
-            {Array.from({ length: 50 }, (_, i) => i + 1).map((num) => (
-              <option key={num} value={num}>
-                {num}
-              </option>
-            ))}
-          </select>
+        {/* Buttons */}
+        <div className="button-group">
+          <button className="cancel-button">Cancel</button>
+          <button className="save-button" onClick={handleSave}>Save</button>
         </div>
-        <div className="divider"></div> {/* Divider below Number of Open Seats */}
+      </section>
 
-        <div className="form-actions">
-          <button type="button" className="cancel-btn">
-            Cancel
-          </button>
-          <button type="submit" className="save-btn">
-            Save
-          </button>
-        </div>
-      </form>
+      <div className="divider"></div>
     </div>
   );
 };
 
-export default JobCreate;
+export default Settings;

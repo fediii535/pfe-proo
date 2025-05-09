@@ -1,12 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { Sun, AlertCircle, Lock, User, Settings, Scale, Search } from "lucide-react"; // Import the search icon
+import {
+  Sun,
+  AlertCircle,
+  Lock,
+  User,
+  Settings as SettingsIcon,
+  Scale,
+  Search,
+  Trash2,
+  Edit2,
+} from "lucide-react";
 import "./Home.css";
 import sickIcon from "./assets/image.png";
-import personalIcon from "./assets/image1.png"; // Image remplacée ici
-import casualIcon from "./assets/image2.png"; // Import the new image for Casual
-import vacationIcon from "./assets/image3.png"; // Import the new image for Vacation
+import personalIcon from "./assets/image1.png";
+import casualIcon from "./assets/image2.png";
+import vacationIcon from "./assets/image3.png";
+import { DatePicker, Modal, Select, Button } from "antd";
+import { useNavigate } from "react-router-dom"; // AJOUTER ÇA
 
 const Home = () => {
+  const navigate = useNavigate(); // AJOUTER ÇA
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [leaveData, setLeaveData] = useState(() => {
     const savedData = localStorage.getItem("leaveData");
@@ -20,11 +34,16 @@ const Home = () => {
     description: "",
   });
 
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [menuVisible, setMenuVisible] = useState(null);
+
   useEffect(() => {
     localStorage.setItem("leaveData", JSON.stringify(leaveData));
   }, [leaveData]);
 
   const openModal = () => setIsModalOpen(true);
+  const handleCancel = () => setIsModalOpen(false);
+
   const closeModal = () => {
     setIsModalOpen(false);
     setFormData({ fromDate: "", toDate: "", type: "", description: "" });
@@ -38,13 +57,13 @@ const Home = () => {
   const handleSubmit = () => {
     if (formData.fromDate && formData.toDate && formData.type) {
       setLeaveData([
-        ...leaveData,
         {
           fromDate: formData.fromDate,
           toDate: formData.toDate,
           type: formData.type,
           status: "Pending",
         },
+        ...leaveData,
       ]);
       closeModal();
     } else {
@@ -52,10 +71,44 @@ const Home = () => {
     }
   };
 
+  const handleCheckboxChange = (index) => {
+    setSelectedRows((prev) =>
+      prev.includes(index)
+        ? prev.filter((i) => i !== index)
+        : [...prev, index]
+    );
+  };
+
+  const handleDelete = () => {
+    setLeaveData((prev) => prev.filter((_, index) => !selectedRows.includes(index)));
+    setSelectedRows([]);
+  };
+
+  const toggleMenu = (index) => {
+    setMenuVisible(menuVisible === index ? null : index);
+  };
+
+  const handleEdit = (index) => {
+    const leaveToEdit = leaveData[index];
+    setFormData({
+      fromDate: leaveToEdit.fromDate,
+      toDate: leaveToEdit.toDate,
+      type: leaveToEdit.type,
+      description: leaveToEdit.description || "",
+    });
+    setIsModalOpen(true);
+    setMenuVisible(null);
+  };
+
+  const handleDeleteRow = (index) => {
+    setLeaveData((prev) => prev.filter((_, i) => i !== index));
+    setMenuVisible(null);
+  };
+
   const getIcon = (type) => {
     switch (type) {
       case "Vacation":
-        return <img src={vacationIcon} alt="Vacation Icon" className="card-icon sun" />; // Updated icon
+        return <img src={vacationIcon} alt="Vacation Icon" className="card-icon sun" />;
       case "Casual":
         return <img src={casualIcon} alt="Casual Icon" className="card-icon alert" />;
       case "Personal":
@@ -71,6 +124,16 @@ const Home = () => {
     return leaveData.filter((leave) => leave.type === type).length;
   };
 
+  const { RangePicker } = DatePicker;
+
+  const goToSettings = () => {
+    navigate("/sidebar/settings"); // REDIRECTION
+  };
+
+  const goToViewMore = (key) => {
+    navigate(`/view-more/${key}`); // Passez un paramètre "key"
+  };
+
   return (
     <div className="home-container">
       <div className="main-content">
@@ -78,72 +141,64 @@ const Home = () => {
           <h1 className="page-title">Home</h1>
         </div>
         <div className="leave-balance-cards">
-          <div className="card">
-            <div className="card-header">
-              <span>Vacation</span>
-              <span className="menu-dots">⋮</span>
+          {/* Cartes */}
+          {["Vacation", "Casual", "Personal", "Sick"].map((type) => (
+            <div className="card" key={type}>
+              <div className="card-header">
+                <span>{type}</span>
+              </div>
+              <div className="card-content">
+                {getIcon(type)}
+                <span className="card-value">{getLeaveCountByType(type)}</span>
+              </div>
             </div>
-            <div className="card-content">
-              <img src={vacationIcon} alt="Vacation Icon" className="card-icon sun" />
-              <span className="card-value">{getLeaveCountByType("Vacation")}</span>
-            </div>
-          </div>
-          <div className="card">
-            <div className="card-header">
-              <span>Casual</span>
-              <span className="menu-dots">⋮</span>
-            </div>
-            <div className="card-content">
-              <img src={casualIcon} alt="Casual Icon" className="card-icon alert" />
-              <span className="card-value">{getLeaveCountByType("Casual")}</span>
-            </div>
-          </div>
-          <div className="card">
-            <div className="card-header">
-              <span>Personal</span>
-              <span className="menu-dots">⋮</span>
-            </div>
-            <div className="card-content">
-              <img src={personalIcon} alt="Personal Icon" className="card-icon lock" />
-              <span className="card-value">{getLeaveCountByType("Personal")}</span>
-            </div>
-          </div>
-          <div className="card">
-            <div className="card-header">
-              <span>Sick</span>
-              <span className="menu-dots">⋮</span>
-            </div>
-            <div className="card-content">
-              <img src={sickIcon} alt="Sick Icon" className="card-icon medical" />
-              <span className="card-value">{getLeaveCountByType("Sick")}</span>
-            </div>
-          </div>
+          ))}
         </div>
 
         <div className="latest-leaves">
-          <div className="latest-leaves-header">
-            <h2>Latest Leaves</h2>
-          </div>
+          {selectedRows.length > 0 ? (
+            <div className="selection-bar">
+              <span>{selectedRows.length} selected</span>
+              <Trash2
+                className="delete-icon"
+                onClick={handleDelete}
+              />
+            </div>
+          ) : (
+            <div className="latest-leaves-header">
+              <h2>Latest Leaves</h2>
+            </div>
+          )}
           <table className="leaves-table">
             <thead>
               <tr>
                 <th>
-                  <input type="checkbox" onChange={(e) => {
-                    const checkboxes = document.querySelectorAll(".row-checkbox");
-                    checkboxes.forEach((checkbox) => (checkbox.checked = e.target.checked));
-                  }} />
+                  <input
+                    type="checkbox"
+                    onChange={(e) => {
+                      const isChecked = e.target.checked;
+                      setSelectedRows(isChecked ? leaveData.map((_, index) => index) : []);
+                    }}
+                    checked={selectedRows.length === leaveData.length}
+                  />
                 </th>
                 <th>Submission Date</th>
                 <th>From - To</th>
                 <th>Type</th>
                 <th>Status</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {leaveData.map((leave, index) => (
                 <tr key={index}>
                   <td>
-                    <input type="checkbox" className="row-checkbox" />
+                    <input
+                      type="checkbox"
+                      className="row-checkbox"
+                      onChange={() => handleCheckboxChange(index)}
+                      checked={selectedRows.includes(index)}
+                    />
                   </td>
                   <td>{new Date().toLocaleString()}</td>
                   <td>
@@ -155,6 +210,27 @@ const Home = () => {
                   <td>
                     <span className="status pending">{leave.status}</span>
                   </td>
+                  <td>
+                    <div className="actions-menu">
+                      <span
+                        className="menu-dots"
+                        onClick={() => toggleMenu(index)}
+                        style={{ cursor: "pointer", marginLeft: "10px" }}
+                      >
+                        ⋮
+                      </span>
+                      {menuVisible === index && (
+                        <div className="menu-options">
+                          <button onClick={() => handleEdit(index)} className="menu-option">
+                            <Edit2 className="icon edit-icon" style={{ color: "#34d399", fontSize: "20px" }} /> Edit
+                          </button>
+                          <button onClick={() => handleDeleteRow(index)} className="menu-option">
+                            <Trash2 className="icon delete-icon" /> Delete
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -162,20 +238,22 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Sidebar moved to the right */}
-      <div className="sidebar">
+      {/* Sidebar */}
+      <div className="sidebar" style={{ marginLeft: "20px" }}>
         <div className="profile-section">
           <User className="profile-picture" />
-          <Search className="search-icon" /> {/* Moved search icon here */}
           <h3>Farouk Abichou</h3>
           <p>Software Developer</p>
           <div className="profile-actions">
-            <button className="settings-btn">
-               Settings
+            <button className="settings-btn" onClick={goToSettings}>
+              Settings
             </button>
-            <button className="view-profile-btn">View profile</button>
+            <button className="view-profile-btn" onClick={() => goToViewMore("example-key")}>
+              View profile
+            </button>
           </div>
         </div>
+
         <div className="balance-section">
           <div>
             <h3>Balance</h3>
@@ -187,67 +265,64 @@ const Home = () => {
             </div>
           </div>
         </div>
-        <button className="apply-btn" onClick={openModal}>Apply for leave</button>
+
+        <button className="apply-btn" onClick={openModal}>
+          Apply for leave
+        </button>
       </div>
 
-      {isModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h2>Apply For Leave</h2>
-            <div className="form-group">
-              <label>Leave Date</label>
-              <div className="date-range">
-                <input
-                  type="date"
-                  name="fromDate"
-                  value={formData.fromDate}
-                  onChange={handleInputChange}
-                />
-                <span>to</span>
-                <input
-                  type="date"
-                  name="toDate"
-                  value={formData.toDate}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <p className="hint-text">Select the start and end dates for your leave.</p>
-            </div>
-            <div className="form-group">
-              <label>Type</label>
-              <select
-                name="type"
-                value={formData.type}
-                onChange={handleInputChange}
-              >
-                <option value="">Select...</option>
-                <option>Vacation</option>
-                <option>Casual</option>
-                <option>Personal</option>
-                <option>Sick</option>
-              </select>
-              <p className="hint-text">Select the type of leave.</p>
-            </div>
-            <div className="form-group">
-              <label>Description</label>
-              <textarea
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-                placeholder="Type..."
-              ></textarea>
-            </div>
-            <div className="modal-actions">
-              <button className="cancel-btn" onClick={closeModal}>
-                Cancel
-              </button>
-              <button className="apply-btn" onClick={handleSubmit}>
-                Apply For Leave
-              </button>
-            </div>
-          </div>
+      {/* Modal pour ajouter leave */}
+      <Modal
+        title="Apply For Leave"
+        open={isModalOpen}
+        footer={false}
+        onCancel={handleCancel}
+      >
+        <div className="input-container">
+          <label>Leave Date</label>
+          <RangePicker
+            onChange={(dates, dateStrings) =>
+              setFormData({ ...formData, fromDate: dateStrings[0], toDate: dateStrings[1] })
+            }
+          />
         </div>
-      )}
+        <div className="input-container">
+          <label>Type</label>
+          <Select
+            showSearch
+            placeholder="Select a leave type"
+            optionFilterProp="label"
+            onChange={(value) => setFormData({ ...formData, type: value })}
+            options={[
+              { value: "Vacation", label: "Vacation" },
+              { value: "Casual", label: "Casual" },
+              { value: "Personal", label: "Personal" },
+              { value: "Sick", label: "Sick" },
+            ]}
+          />
+        </div>
+        <div className="input-container">
+          <label>Description</label>
+          <textarea
+            name="description"
+            placeholder="Type..."
+            value={formData.description}
+            onChange={handleInputChange}
+            style={{ width: "100%", height: "80px", resize: "none" }}
+          />
+          
+        </div>
+        <div className="footer-container">
+          <Button onClick={closeModal}>Cancel</Button>
+          <Button
+            type="primary"
+            onClick={handleSubmit}
+            disabled={!formData.fromDate || !formData.toDate || !formData.type}
+          >
+            Apply For Leave
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 };

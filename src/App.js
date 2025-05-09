@@ -13,6 +13,8 @@ import Settings from "./Settings";
 import Employee from "./Employee";
 import LeaveRequestForm from "./LeaveRequestForm"; 
 import ReadJobs from "./ReadJobs"; // Import ReadJobs component
+import VueMore from "./ViewMore"; // Import VueMore component
+import ViewMore from "./ViewMore"; // Import the new component
 
 function App() {
   return (
@@ -37,6 +39,12 @@ function App() {
 
         {/* Route pour la page Leave Request */}
         <Route path="/leave-request" element={<LeaveRequestForm />} />
+
+        {/* Route for VueMore */}
+        <Route path="/vue-more/:key" element={<VueMore />} />
+
+        {/* Route for ViewMore */}
+        <Route path="/view-more/:key" element={<ViewMore />} />
       </Routes>
     </Router>
   );

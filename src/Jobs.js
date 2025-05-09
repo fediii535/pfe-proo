@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "antd";
-import { Trash2 } from "lucide-react";
 import "./Jobs.css";
-import frameIcon from "./assets/frame.png"; // ✅ Import propre de l'image
-import groupIcon from "./assets/Group.png"; // Import the Group.png image
-import deleteIcon from "./assets/Delete.png"; // Import the Delete.png image
+import groupIcon from "./assets/Group.png"; // ✅ Icone Edit
+import deleteIcon from "./assets/Delete.png"; // ✅ Icone Delete
 
 const defaultJobs = [
   { title: "UI/UX Designer", category: "Design", description: "Short summary of the job", deadline: "2025-04-30", status: "Open" },
@@ -21,7 +19,7 @@ const defaultJobs = [
 
 const categories = ["View all", "Informatics", "Business", "Design"];
 
-function JobCard({ job, shareIcon, editIcon, deleteIcon, onDelete }) {
+function JobCard({ job, editIcon, deleteIcon, onDelete, onEdit }) {
   const navigate = useNavigate();
 
   return (
@@ -30,9 +28,18 @@ function JobCard({ job, shareIcon, editIcon, deleteIcon, onDelete }) {
         <div className="job-icon"></div>
         <h3>{job.title}</h3>
         <div className="job-actions">
-          <img src={shareIcon} alt="Share" className="job-icon-btn share" style={{ background: "none" }} /> {/* Dynamic share icon */}
-          <img src={editIcon} alt="Edit" className="job-icon-btn edit" style={{ background: "none" }} /> {/* Dynamic edit icon */}
-          <img src={deleteIcon} alt="Delete" className="job-icon-btn delete" onClick={onDelete} style={{ background: "none" }} /> {/* Replace Trash2 */}
+          <img
+            src={editIcon}
+            alt="Edit"
+            className="job-icon-btn edit"
+            onClick={() => onEdit(job)}
+          />
+          <img
+            src={deleteIcon}
+            alt="Delete"
+            className="job-icon-btn delete"
+            onClick={onDelete}
+          />
         </div>
       </div>
       <p className="job-description">{job.description}</p>
@@ -41,7 +48,7 @@ function JobCard({ job, shareIcon, editIcon, deleteIcon, onDelete }) {
       <hr />
       <div
         className="job-footer"
-        onClick={() => navigate("/sidebar/jobs/read")} // Navigate to ReadJobs
+        onClick={() => navigate("/sidebar/jobs/read")}
         style={{ cursor: "pointer" }}
       >
         See More
@@ -68,6 +75,10 @@ export default function JobListing() {
     setFilteredJobs((prevJobs) => prevJobs.filter((job) => job.title !== jobTitle));
   };
 
+  const handleEditJob = (job) => {
+    navigate(`/sidebar/jobs/edit`, { state: { job } });
+  };
+
   return (
     <main className="content">
       <div className="header">
@@ -83,7 +94,6 @@ export default function JobListing() {
         </Button>
       </div>
 
-      {/* Job Title Section */}
       <div
         className="job-title-section"
         style={{ textAlign: "left", marginRight: "1010px" }}
@@ -91,7 +101,7 @@ export default function JobListing() {
         <h2>Job Title</h2>
       </div>
 
-      <p className="subtitle">Lorem Ipsum Lorem Ipsum </p>
+      <p className="subtitle">Lorem Ipsum Lorem Ipsum</p>
 
       <div className="categories">
         {categories.map((category, i) => (
@@ -107,7 +117,16 @@ export default function JobListing() {
 
       <div className="job-grid">
         {filteredJobs.length > 0 ? (
-          filteredJobs.map((job, i) => <JobCard key={i} job={job} shareIcon={frameIcon} editIcon={groupIcon} deleteIcon={deleteIcon} onDelete={() => handleDeleteJob(job.title)} />) /* Pass dynamic share and edit icons */
+          filteredJobs.map((job, i) => (
+            <JobCard
+              key={i}
+              job={job}
+              editIcon={groupIcon}
+              deleteIcon={deleteIcon}
+              onDelete={() => handleDeleteJob(job.title)}
+              onEdit={handleEditJob}
+            />
+          ))
         ) : (
           <div className="no-jobs">No jobs available</div>
         )}

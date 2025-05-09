@@ -16,7 +16,7 @@ const LeaveRequestForm = () => {
     } else {
       setError(false);
       alert("Leave request submitted!");
-      navigate("/home");  
+      navigate("/home");
     }
   };
 
@@ -24,7 +24,7 @@ const LeaveRequestForm = () => {
     <div className="modal-overlay">
       <div className="modal-container">
         <h2 className="modal-title">Apply For Leave</h2>
-        <p className="modal-subtitle">Lorem ipsum</p>
+        <p className="modal-subtitle">Please fill in the form below</p>
         <form onSubmit={handleSubmit} className="form">
           <div className="form-group">
             <label className="form-label">Leave Date</label>
@@ -34,7 +34,7 @@ const LeaveRequestForm = () => {
               onChange={(e) => setLeaveDate(e.target.value)}
               className="form-input"
             />
-            <p className="hint">This is a hint text to help user.</p>
+            <p className="hint">Select the date you want to take off.</p>
           </div>
 
           <div className="form-group">
@@ -49,19 +49,10 @@ const LeaveRequestForm = () => {
               <option value="sick">Sick Leave</option>
               <option value="personal">Personal</option>
             </select>
-            <p className="hint">This is a hint text to help user.</p>
+            <p className="hint">Choose the type of leave.</p>
           </div>
 
-          <div className="form-group">
-            <label className="form-label">Description</label>
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Type..."
-              className={`form-textarea ${error ? "error" : ""}`}
-            ></textarea>
-            {error && <p className="error-message">This is an error message.</p>}
-          </div>
+         
 
           <div className="form-buttons">
             <button

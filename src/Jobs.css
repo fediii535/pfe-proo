@@ -147,22 +147,19 @@
 }
 
 .job-icon-btn.delete {
-  width: 18.91px; /* Width */
-  height: 21.75px; /* Height */
-  background: #7F56D9; /* Purple color */
-  border-radius: 4px; /* Slightly rounded corners */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white; /* Icon color */
-  font-size: 14px; /* Icon font size */
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  color: #6c47ff;
+  background: none; /* Remove background */
+  border-radius: 0; /* Remove rounded corners */
+  width: auto; /* Adjust width */
+  height: auto; /* Adjust height */
+  display: inline; /* Match edit icon style */
+  transition: none; /* Remove hover effects */
 }
 
 .job-icon-btn.delete:hover {
-  transform: scale(1.1); /* Slightly enlarge on hover */
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow on hover */
+  transform: none; /* Remove hover transform */
+  box-shadow: none; /* Remove hover shadow */
 }
 
 .job-icon-btn.share {

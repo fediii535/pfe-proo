@@ -1,158 +1,133 @@
 import React, { useState } from "react";
-import { FaSearch, FaChevronLeft, FaChevronRight, FaFileExport } from "react-icons/fa";
-import "./Leaves.css";
+import {
+  Search,
+  Eye,
+  Trash2,
+  ChevronLeft,
+  ChevronRight,
+  FileDown
+} from "lucide-react";
+import "./Employee.css";
 
-const Leaves = () => {
-  const allData = [
+const Employee = () => {
+  const allDataInit = [
     {
       key: 1,
       name: "Mr. Billy Strosin V",
       role: "Product Designer",
-      leaveType: "Vacation",
-      startDate: "02/10/2025 22:52",
-      endDate: "06/10/2025 22:52",
-      duration: "4 days",
-      status: "Pending"
+      email: "Farouk@gmail.com",
+      phone: "+216 24 800 353",
+      hiringDate: "02/19/2025 22:52",
     },
-    {
-      key: 2,
-      name: "Blake Becker",
+    // Ajoute ici les autres employés de départ
+    ...Array.from({ length: 50 }, (_, i) => ({
+      key: i + 2,
+      name: `Employee ${i + 2}`,
       role: "Product Designer",
-      leaveType: "Vacation",
-      startDate: "02/07/2025 05:03",
-      endDate: "06/07/2025 05:03",
-      duration: "4 days",
-      status: "Pending"
-    },
-    {
-      key: 3,
-      name: "Angela Runte",
-      role: "Product Designer",
-      leaveType: "Vacation",
-      startDate: "02/05/2025 05:03",
-      endDate: "06/05/2025 05:03",
-      duration: "4 days",
-      status: "Pending"
-    },
-    {
-      key: 4,
-      name: "Jimmie Wolf",
-      role: "Product Designer",
-      leaveType: "Vacation",
-      startDate: "02/06/2025 05:03",
-      endDate: "06/06/2025 05:03",
-      duration: "4 days",
-      status: "Pending"
-    },
-    {
-      key: 5,
-      name: "Irma Hane",
-      role: "Product Designer",
-      leaveType: "Vacation",
-      startDate: "02/09/2025 05:03",
-      endDate: "06/09/2025 05:03",
-      duration: "4 days",
-      status: "Pending"
-    },
-    {
-      key: 6,
-      name: "DR. Alonzo Hegmann",
-      role: "Product Designer",
-      leaveType: "Vacation",
-      startDate: "02/05/2025 05:03",
-      endDate: "06/05/2025 05:03",
-      duration: "4 days",
-      status: "Pending"
-    },
-    {
-      key: 7,
-      name: "Sergio Gislason",
-      role: "Product Designer",
-      leaveType: "Vacation",
-      startDate: "02/04/2025 05:03",
-      endDate: "06/04/2025 05:03",
-      duration: "4 days",
-      status: "Pending"
-    },
-    // ... autres données comme dans votre exemple
+      email: "Farouk@gmail.com",
+      phone: "+216 24 800 353",
+      hiringDate: `03/${(i % 30) + 1}/2025 10:00`,
+    })),
   ];
 
-  const [data, setData] = useState(allData.slice(0, 10));
+  const [allEmployees, setAllEmployees] = useState(allDataInit);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectAll, setSelectAll] = useState(false);
+  const [selectedCount, setSelectedCount] = useState(0);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedEmployeeToDelete, setSelectedEmployeeToDelete] = useState(null);
+  const [selectedEmployeeDetails, setSelectedEmployeeDetails] = useState(null);
+
+  const itemsPerPage = 10;
+
+  const filteredEmployees = allEmployees.filter(emp =>
+    emp.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const totalPages = Math.ceil(filteredEmployees.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentEmployees = filteredEmployees.slice(startIndex, startIndex + itemsPerPage);
 
   const handleSearch = (e) => {
-    const value = e.target.value.toLowerCase();
-    setSearchTerm(value);
-    const filteredData = allData.filter((item) =>
-      item.name.toLowerCase().includes(value)
-    );
-    setData(filteredData.slice(0, 10));
+    setSearchTerm(e.target.value);
     setCurrentPage(1);
   };
 
   const handlePageChange = (page) => {
-    const startIndex = (page - 1) * 10;
-    const filteredData = allData.filter((item) =>
-      item.name.toLowerCase().includes(searchTerm)
-    );
-    setData(filteredData.slice(startIndex, startIndex + 10));
     setCurrentPage(page);
   };
 
   const toggleSelectAll = (isChecked) => {
     setSelectAll(isChecked);
-    const updatedData = data.map(item => ({ ...item, isChecked })); 
-    setData(updatedData);
+    const newSelected = isChecked ? currentEmployees.map(emp => emp.key) : [];
+    setSelectedRows(newSelected);
+    setSelectedCount(newSelected.length);
   };
 
   const toggleCheckbox = (key) => {
-    const updatedData = data.map(item =>
-      item.key === key ? { ...item, isChecked: !item.isChecked } : item
-    );
-    setData(updatedData);
+    const updated = selectedRows.includes(key)
+      ? selectedRows.filter((id) => id !== key)
+      : [...selectedRows, key];
+
+    setSelectedRows(updated);
+    setSelectedCount(updated.length);
+    setSelectAll(updated.length === currentEmployees.length);
   };
 
-  const handleApprove = (key) => {
-    const updatedData = data.map(item =>
-      item.key === key ? { ...item, status: "Approved" } : item
-    );
-    setData(updatedData);
+  const openDeleteModal = (key) => {
+    setSelectedEmployeeToDelete(key);
+    setShowDeleteModal(true);
   };
 
-  const handleReject = (key) => {
-    const updatedData = data.filter((item) => item.key !== key);
-    setData(updatedData);
+  const confirmDelete = () => {
+    const updated = allEmployees.filter(emp => emp.key !== selectedEmployeeToDelete);
+    setAllEmployees(updated);
+    setSelectedRows(selectedRows.filter(id => id !== selectedEmployeeToDelete));
+    setSelectedCount(prev => prev - 1);
+    setShowDeleteModal(false);
+    setSelectedEmployeeToDelete(null);
+  };
+
+  const deleteSelected = () => {
+    const updated = allEmployees.filter(emp => !selectedRows.includes(emp.key));
+    setAllEmployees(updated);
+    setSelectedRows([]);
+    setSelectedCount(0);
+    setSelectAll(false);
   };
 
   return (
-    <div className="leaves-container">
-      <header className="leaves-header">
-        <h1>Home</h1>
-        <div className="header-right">
-          <div className="search-container">
-            <FaSearch className="search-icon" />
-            <input
-              type="text"
-              placeholder="Search"
-              value={searchTerm}
-              onChange={handleSearch}
-            />
-          </div>
-          <button className="export-btn">
-            <FaFileExport /> Export
-          </button>
-        </div>
-      </header>
+    <div className="employee-container">
+      <div className="employee-header">
+        <h1>Employees</h1>
+        <button className="export-btn">
+          <FileDown size={16} /> Export
+        </button>
+      </div>
 
       <div className="section-header">
-        <h2 className="leaves-subtitle">Latest Leaves Request</h2>
-        <p className="description">Keep Lorem IpsumLorem IpsumLorem Ipsum Lorem</p>
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Search"
+            value={searchTerm}
+            onChange={handleSearch}
+          />
+        </div>
       </div>
-      
 
       <div className="table-container">
+        <h2 className="table-header">Latest Hiring</h2>
+        {selectedCount > 0 && (
+          <div className="green-bar">
+            <span>{selectedCount} selected</span>
+            <button onClick={deleteSelected}>
+              <Trash2 size={16} />
+            </button>
+          </div>
+        )}
         <table>
           <thead>
             <tr>
@@ -164,98 +139,108 @@ const Leaves = () => {
                 />
               </th>
               <th>Name</th>
-              <th>Leave Type</th>
-              <th>Start Date</th>
-              <th>End Date</th>
-              <th>Duration</th>
-              <th>Status</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Hiring Date</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {data.length > 0 ? (
-              data.map((item) => (
-                <React.Fragment key={item.key}>
-                  <tr>
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={item.isChecked || false}
-                        onChange={() => toggleCheckbox(item.key)}
-                      />
-                    </td>
-                    <td>
-                      <div className="name-cell">
-                        <div className="avatar"></div>
-                        <div>
-                          <p>{item.name}</p>
-                          <p className="role">{item.role}</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="leave-type">{item.leaveType}</td>
-                    <td>{item.startDate}</td>
-                    <td>{item.endDate}</td>
-                    <td>{item.duration}</td>
-                    <td className={`status ${item.status.toLowerCase()}`}>
-                      {item.status}
-                    </td>
-                    <td>
-                      <button 
-                        className="approve-btn"
-                        onClick={() => handleApprove(item.key)}
-                      >
-                        ✓
-                      </button>
-                      <button 
-                        className="delete-btn"
-                        onClick={() => handleReject(item.key)}
-                      >
-                        ✗
-                      </button>
-                    </td>
-                  </tr>
-                  <tr className="spacer-row">
-                    <td colSpan="8"></td>
-                  </tr>
-                </React.Fragment>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="8" className="no-data">
-                  No data available.
+            {currentEmployees.map((emp) => (
+              <tr key={emp.key}>
+                <td>
+                  <input
+                    type="checkbox"
+                    checked={selectedRows.includes(emp.key)}
+                    onChange={() => toggleCheckbox(emp.key)}
+                  />
                 </td>
+                <td>
+                  <div className="name-cell">
+                    <div className="avatar" />
+                    <div>
+                      <p>{emp.name}</p>
+                      <p className="role">{emp.role}</p>
+                    </div>
+                  </div>
+                </td>
+                <td>{emp.email}</td>
+                <td>{emp.phone}</td>
+                <td>{emp.hiringDate}</td>
+                <td>
+                  <div className="action-buttons">
+                    <button className="approve-btn">
+                      <span>✔</span>
+                    </button>
+                    <button className="delete-btn">
+                      <span>✖</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+            {currentEmployees.length === 0 && (
+              <tr>
+                <td colSpan="6" className="no-data">No data found.</td>
               </tr>
             )}
           </tbody>
         </table>
       </div>
 
-      <footer className="pagination">
+      <div className="pagination">
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
         >
-          <FaChevronLeft /> Previous
+          <ChevronLeft size={16} /> Previous
         </button>
         <div className="page-numbers">
-          <button className={currentPage === 1 ? "active" : ""} onClick={() => handlePageChange(1)}>1</button>
-          <button className={currentPage === 2 ? "active" : ""} onClick={() => handlePageChange(2)}>2</button>
-          <button className={currentPage === 3 ? "active" : ""} onClick={() => handlePageChange(3)}>3</button>
-          <span>...</span>
-          <button className={currentPage === 8 ? "active" : ""} onClick={() => handlePageChange(8)}>8</button>
-          <button className={currentPage === 9 ? "active" : ""} onClick={() => handlePageChange(9)}>9</button>
-          <button className={currentPage === 10 ? "active" : ""} onClick={() => handlePageChange(10)}>10</button>
+          {[...Array(totalPages)].map((_, index) => (
+            <button
+              key={index + 1}
+              className={currentPage === index + 1 ? "active" : ""}
+              onClick={() => handlePageChange(index + 1)}
+            >
+              {index + 1}
+            </button>
+          ))}
         </div>
         <button
           onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === Math.ceil(allData.length / 10)}
+          disabled={currentPage === totalPages}
         >
-          Next <FaChevronRight />
+          Next <ChevronRight size={16} />
         </button>
-      </footer>
+      </div>
+
+      {selectedEmployeeDetails && (
+        <div className="modal">
+          <div className="modal-content">
+            <h3>Employee Details</h3>
+            <p><strong>Name:</strong> {selectedEmployeeDetails.name}</p>
+            <p><strong>Role:</strong> {selectedEmployeeDetails.role}</p>
+            <p><strong>Email:</strong> {selectedEmployeeDetails.email}</p>
+            <p><strong>Phone:</strong> {selectedEmployeeDetails.phone}</p>
+            <p><strong>Hiring Date:</strong> {selectedEmployeeDetails.hiringDate}</p>
+            <button onClick={() => setSelectedEmployeeDetails(null)}>Close</button>
+          </div>
+        </div>
+      )}
+
+      {showDeleteModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <p>Are you sure you want to delete this employee?</p>
+            <div className="modal-actions">
+              <button onClick={confirmDelete}>Yes</button>
+              <button onClick={() => setShowDeleteModal(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default Leaves;
+export default Employee;

@@ -57,6 +57,13 @@
 .form-textarea {
   resize: none;
   height: 80px;
+  background-color: #fafafa;
+  transition: border-color 0.3s ease;
+}
+
+.form-textarea::placeholder {
+  color: #bbb;
+  font-style: italic;
 }
 
 .hint {
@@ -67,6 +74,7 @@
 
 .error {
   border-color: red;
+  box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.2);
 }
 
 .error-message {

@@ -1,9 +1,11 @@
 .profile-settings {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  color: #333;
+  padding: 24px;
+  margin: 0; /* Remove any margins */
+  width: 100%; /* Span the entire page width */
+  max-width: 100%; /* Ensure no width restriction */
+  background-color: #fff;
+  min-height: 100vh; /* Ensure it covers the full viewport height */
+  overflow-x: hidden; /* Remove horizontal scroll bar */
 }
 
 .profile-settings h1 {
@@ -15,6 +17,7 @@
   font-size: 20px;
   margin: 25px 0 15px 0;
   color: #444;
+  margin-right: 620px;
 }
 
 .profile-description {
@@ -22,21 +25,32 @@
   color: #666;
 }
 
+.company-profile {
+  width: 100%; /* Ensure the profile section spans the full width */
+  margin: 0; /* Remove centered margin */
+}
+
 .form-section {
-  border: 1px solid #eee;
+  width: 100%; /* Ensure the form section spans the full width */
+  max-width: 100%; /* Remove any width restriction */
+  border: 1px solid #e5e7eb;
   border-radius: 8px;
-  padding: 0;
-  margin-bottom: 20px;
+  padding: 24px;
+  background-color: #fff;
 }
 
 .form-row {
   display: flex;
-  padding: 15px;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
 }
 
 .label-col {
   flex: 1;
-  padding-right: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #344054;
 }
 
 .input-col {
@@ -55,27 +69,123 @@
   margin: 5px 0 0 0;
 }
 
-.input-field {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background-color: #f9f9f9;
-  width: 100%;
+.input-field,
+textarea,
+.input-department,
+.upload-area {
+  width: 80%; /* Ensure consistent width */
+  padding: 6px 10px; /* Adjust padding */
+  font-size: 13px; /* Reduce font size */
+  border-radius: 6px; /* Slightly smaller border radius */
   box-sizing: border-box;
+  border: 1px solid #d0d5dd;
+  color: #344054;
+  background-color: #fff;
+}
+
+.input-field:focus,
+textarea:focus {
+  outline: 2px solid #6941c6;
+  border-color: #6941c6;
+}
+
+.input-field .ant-select-selector {
+  border: none; /* Remove the border */
+  box-shadow: none; /* Remove any shadow */
+  background-color: transparent; /* Make background transparent */
+}
+
+.input-field .ant-select-selector:focus,
+.input-field .ant-select-selector:hover {
+  border: none; /* Ensure no border on focus or hover */
+  box-shadow: none; /* Ensure no shadow on focus or hover */
+}
+
+.input-department .ant-input-group-addon {
+  background-color: #f9f9f9;
+  border: none;
+  font-weight: 500;
+  color: #6941C6;
+  font-family: 'Inter', sans-serif;
+}
+
+.input-department .ant-select-selector {
+  border: none; /* Remove the inner border */
+  box-shadow: none; /* Remove any shadow */
+  background-color: transparent; /* Make background transparent */
+}
+
+.input-department .ant-select-selector:focus,
+.input-department .ant-select-selector:hover {
+  border: none; /* Ensure no border on focus or hover */
+  box-shadow: none; /* Ensure no shadow on focus or hover */
+}
+
+.no-border .ant-select-selector {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.avatar-upload {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* Reduce spacing between the circle and upload area */
+}
+
+.avatar-preview {
+  width: 48px; /* Reduce circle size */
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #29359b 0%, #6068ca 100%);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
 }
 
 .upload-area {
-  border: 2px dashed #ddd;
-  border-radius: 4px;
-  padding: 20px;
+  border: 2px dashed #d0d5dd;
   text-align: center;
+  background-color: #f9fafb;
   cursor: pointer;
-  transition: all 0.3s;
-  
+  transition: border-color 0.3s ease;
 }
 
 .upload-area:hover {
-  border-color: #aaa;
+  border-color: #6941c6;
+}
+
+.upload-area svg {
+  display: block;
+  margin: 0 auto 10px;
+  width: 32px; /* Reduce icon size */
+  height: 32px;
+  fill: none;
+}
+
+.upload-area p {
+  margin: 5px 0;
+  color: #666;
+  font-size: 13px; /* Match font size with inputs */
+}
+
+.upload-area p:first-of-type {
+  color: #6941C6;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  margin-bottom: 0;
+  text-align: center;
+  display: inline;
+}
+
+.upload-area p span {
+  color: #666;
+  font-weight: normal;
+}
+
+.upload-area p.file-types {
+  color: #999;
+  font-size: 12px;
 }
 
 .file-types {
@@ -86,42 +196,71 @@
 
 .divider-line {
   height: 1px;
- 
+  background-color: #eee;
   margin: 0;
 }
 
 .button-group {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
-  margin-top: 20px;
+  gap: 12px;
+  margin-top: 24px;
+  transform: translateX(-10px); /* Shift buttons slightly to the left */
 }
 
-.save-button, .cancel-button {
-  padding: 10px 20px;
-  border-radius: 4px;
+.save-button,
+.cancel-button {
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
-  font-weight: bold;
+  transition: all 0.3s ease;
 }
 
 .save-button {
-  background-color: #4CAF50;
-  
-  border: none;
+  background-color: #7f56d9;
+  color: #fff;
+  border: 1px solid #7f56d9;
+}
+
+.save-button:hover {
+  background-color: #6941c6;
+  border-color: #6941c6;
+}
+
+.save-button:active {
+  background-color: #53389E;
+  border-color: #53389E;
+}
+
+.save-button:focus {
+  outline: 2px solid #D6BBFB;
+  outline-offset: 2px;
 }
 
 .cancel-button {
-  
-  color: #333;
-  border: 1px solid #ddd;
+  background-color: #fff;
+  color: #344054;
+  border: 1px solid #d0d5dd;
+}
+
+.cancel-button:hover {
+  background-color: #f9fafb;
+}
+
+.cancel-button:active {
+  background-color: #EAECF0;
+  border-color: #D0D5DD;
+}
+
+.cancel-button:focus {
+  outline: 2px solid #D0D5DD;
+  outline-offset: 2px;
 }
 
 .divider {
   height: 1px;
-  
+  background-color: #eee;
   margin: 30px 0;
-}
-
-.settings h2 {
-  margin-top: 0;
 }
