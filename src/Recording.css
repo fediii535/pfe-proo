@@ -125,8 +125,65 @@
 }
 
 .actions-cell .delete {
+<<<<<<< Updated upstream
   background-color: transparent;
   color: #F44336; 
   font-weight: bold;
   text-decoration: underline;
 }
+=======
+  color: #F04438; /* Error/600 */
+}
+
+.table-header {
+  text-align: left;
+  padding: 16px 24px;
+  background-color: #ffffff; /* Blanc */
+  border-bottom: 1px  #f5f5f7; /* Subtle border */
+}
+
+.table-header h2 {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  color: #070707; /* Dark gray */
+  margin-right: 800px;
+}
+
+.table-header p {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #58595e; /* Medium gray */
+  margin: 4px 0 0;
+}
+
+.green-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Space between text and delete icon */
+  background-color: #ECFDF3; /* Green/25 */
+  color: #027A48; /* Green/700 */
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  margin-bottom: 16px;
+}
+
+.delete-icon {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.delete-icon-img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+>>>>>>> Stashed changes

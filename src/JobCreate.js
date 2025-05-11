@@ -145,4 +145,8 @@ const JobCreate = () => {
   );
 };
 
+<<<<<<< Updated upstream
 export default JobCreate;
+=======
+export default Settings;
+>>>>>>> Stashed changes
