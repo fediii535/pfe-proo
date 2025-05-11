@@ -44,6 +44,7 @@ const Settings = () => {
       <Menu.Item key="Marketing">Marketing</Menu.Item>
       <Menu.Item key="Development">Development</Menu.Item>
       <Menu.Item key="Design">Design</Menu.Item>
+      <Menu.Item key="comptabilité">comptabilité</Menu.Item>
     </Menu>
   );
 

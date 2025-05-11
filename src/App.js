@@ -15,6 +15,7 @@ import LeaveRequestForm from "./LeaveRequestForm";
 import ReadJobs from "./ReadJobs"; // Import ReadJobs component
 import VueMore from "./ViewMore"; // Import VueMore component
 import ViewMore from "./ViewMore"; // Import the new component
+import CreateClient from "./CreateClient"; // Import CreateClient component
 
 function App() {
   return (
@@ -45,6 +46,9 @@ function App() {
 
         {/* Route for ViewMore */}
         <Route path="/view-more/:key" element={<ViewMore />} />
+
+        {/* Route for CreateClient */}
+        <Route path="/CreateClient" element={<CreateClient />} /> {/* Add route for CreateClient */}
       </Routes>
     </Router>
   );

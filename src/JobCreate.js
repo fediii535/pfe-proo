@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
 import './Settings.css';
-import { Input, Dropdown, Menu, Select, DatePicker } from 'antd'; // Import DatePicker from antd
+import { Input, Dropdown, Menu, Select, DatePicker } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
+import { createClient } from '@supabase/supabase-js';
+import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
+import 'react-toastify/dist/ReactToastify.css'; // Import Toastify styles
+
+// Initialize Supabase client
+const supabaseUrl = 'https://agbpojgpdponyeigrsfs.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFnYnBvamdwZHBvbnllaWdyc2ZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYxODk5NzUsImV4cCI6MjA2MTc2NTk3NX0.oWElgbY0Wk9gyFv9tH13pYCePHHQ1vbiqQNarf_zUko';
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 const Settings = () => {
   const [selectedDepartment, setSelectedDepartment] = useState('Create your department');
@@ -10,13 +18,47 @@ const Settings = () => {
   const [openSeats, setOpenSeats] = useState(null);
   const [department, setDepartment] = useState(null);
   const [deadline, setDeadline] = useState(null);
+  const [imageFile, setImageFile] = useState(null); // State for image file
+  const [imagePreview, setImagePreview] = useState(null); // State for image preview
   const [errors, setErrors] = useState({}); // State for field errors
+  const [bgColor, setBgColor] = useState(''); // State for background color
+  const [uploadBgColor, setUploadBgColor] = useState(''); // State for upload field background color
+  const [formRowBgColor, setFormRowBgColor] = useState(''); // State for form-row background color
 
   const handleMenuClick = (e) => {
     setSelectedDepartment(e.key);
   };
 
-  const handleSave = () => {
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setImageFile(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => setImagePreview(reader.result);
+      reader.readAsDataURL(file);
+      setUploadBgColor('#d4edda'); // Set upload field background to cool green
+      setFormRowBgColor('#d4edda'); // Set form-row background to cool green
+    }
+  };
+
+  const handleImageUpload = async () => {
+    if (!imageFile) return null;
+
+    const fileName = `${Date.now()}_${imageFile.name}`;
+    const { data, error } = await supabase.storage
+      .from('job-images') // Replace 'job-images' with your storage bucket name
+      .upload(fileName, imageFile);
+
+    if (error) {
+      console.error('Error uploading image:', error);
+      return null;
+    }
+
+    const { publicURL } = supabase.storage.from('job-images').getPublicUrl(fileName);
+    return publicURL;
+  };
+
+  const handleSave = async () => {
     const newErrors = {};
     if (!jobName) newErrors.jobName = 'Job name is required';
     if (!description) newErrors.description = 'Description is required';
@@ -27,8 +69,34 @@ const Settings = () => {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      console.log('Form submitted successfully');
-      // Add form submission logic here
+      try {
+        const imageUrl = await handleImageUpload();
+
+        const { data, error } = await supabase
+          .from('jobs') // Replace 'jobs' with your table name
+          .insert([
+            {
+              job_name: jobName,
+              description: description,
+              open_seats: openSeats,
+              department: department,
+              deadline: deadline,
+              image_url: imageUrl, // Save image URL
+            },
+          ]);
+
+        if (error) {
+          console.error('Error inserting data:', error);
+          toast.error('Failed to create the job. Please try again.');
+        } else {
+          console.log('Data inserted successfully:', data);
+          toast.success('Job created successfully! 🎉');
+          setBgColor('#d4edda'); // Set background color to cool green
+        }
+      } catch (err) {
+        console.error('Unexpected error:', err);
+        toast.error('An unexpected error occurred. Please try again.');
+      }
     }
   };
 
@@ -58,7 +126,8 @@ const Settings = () => {
   };
 
   return (
-    <div className="profile-settings">
+    <div className="profile-settings" style={{ backgroundColor: bgColor }}>
+      <ToastContainer /> {/* Add ToastContainer to render toast messages */}
       <h1>Create Job</h1>
 
       <section className="company-profile">
@@ -106,19 +175,30 @@ const Settings = () => {
           <div className="divider-line"></div>
 
           {/* Profile Picture Upload */}
-          <div className="form-row">
+          <div
+            className="form-row"
+            style={{ backgroundColor: formRowBgColor }} // Apply dynamic background color
+          >
             <div className="label-col">
               <label>Choose Job Picture</label>
               <p className="description">This will be displayed on job profile.</p>
             </div>
             <div className="input-col">
-              <div className="avatar-upload">
-                <div className="avatar-preview"></div> {/* Circle on the left */}
+              <div
+                className="avatar-upload"
+                style={{ backgroundColor: uploadBgColor }} // Apply dynamic background color
+              >
+                {imagePreview && (
+                  <div className="avatar-preview">
+                    <img src={imagePreview} alt="Preview" style={{ width: '100px', height: '100px', borderRadius: '50%' }} />
+                  </div>
+                )}
                 <div className="upload-area">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 16V8M12 8L8 12M12 8L16 12M20 16C20 18.2091 18.2091 20 16 20H8C5.79086 20 4 18.2091 4 16C4 13.7909 5.79086 12 8 12H9" 
-                      stroke="#6941C6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                  />
                   <p>Click to upload <span>or drag and drop</span></p>
                   <p className="file-types">SVG, PNG, JPG or GIF (max. 800×400px)</p>
                 </div>

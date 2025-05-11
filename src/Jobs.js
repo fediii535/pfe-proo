@@ -1,21 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "antd";
+import { createClient } from "@supabase/supabase-js"; // Import Supabase client
 import "./Jobs.css";
 import groupIcon from "./assets/Group.png"; // ✅ Icone Edit
 import deleteIcon from "./assets/Delete.png"; // ✅ Icone Delete
 
-const defaultJobs = [
-  { title: "UI/UX Designer", category: "Design", description: "Short summary of the job", deadline: "2025-04-30", status: "Open" },
-  { title: "Graphic Designer", category: "Design", description: "Create visuals for brands", deadline: "2025-05-15", status: "Open" },
-  { title: "Frontend Developer", category: "Informatics", description: "Build modern web applications", deadline: "2025-04-20", status: "Open" },
-  { title: "Backend Engineer", category: "Informatics", description: "Develop server-side logic", deadline: "2025-06-10", status: "Open" },
-  { title: "Data Scientist", category: "Informatics", description: "Analyze large datasets", deadline: "2025-07-01", status: "Open" },
-  { title: "Business Analyst", category: "Business", description: "Analyze market trends", deadline: "2025-05-25", status: "Open" },
-  { title: "Marketing Manager", category: "Business", description: "Develop marketing strategies", deadline: "2025-06-15", status: "Open" },
-  { title: "Project Manager", category: "Business", description: "Manage company projects", deadline: "2025-08-01", status: "Open" },
-  { title: "Cybersecurity Analyst", category: "Informatics", description: "Ensure system security", deadline: "2025-07-20", status: "Open" }
-];
+// Initialize Supabase client
+const supabaseUrl = 'https://agbpojgpdponyeigrsfs.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFnYnBvamdwZHBvbnllaWdyc2ZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYxODk5NzUsImV4cCI6MjA2MTc2NTk3NX0.oWElgbY0Wk9gyFv9tH13pYCePHHQ1vbiqQNarf_zUko';
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 const categories = ["View all", "Informatics", "Business", "Design"];
 
@@ -44,7 +38,17 @@ function JobCard({ job, editIcon, deleteIcon, onDelete, onEdit }) {
       </div>
       <p className="job-description">{job.description}</p>
       <p className="job-deadline">Deadline: {job.deadline}</p>
-      <span className="job-status">{job.status}</span>
+      <span
+        className="job-status"
+        style={{
+          backgroundColor: new Date(job.deadline) < new Date() ? "#ffcccc" : "#ccffcc", // Green background for "open"
+          color: new Date(job.deadline) < new Date() ? "red" : "green", // Green text for "open"
+          padding: "2px 5px",
+          borderRadius: "4px"
+        }}
+      >
+        {new Date(job.deadline) < new Date() ? "closed" : "open"}
+      </span>
       <hr />
       <div
         className="job-footer"
@@ -59,28 +63,103 @@ function JobCard({ job, editIcon, deleteIcon, onDelete, onEdit }) {
 
 export default function JobListing() {
   const [selectedCategory, setSelectedCategory] = useState("View all");
-  const [filteredJobs, setFilteredJobs] = useState(defaultJobs);
+  const [jobs, setJobs] = useState([]); // State for jobs fetched from Supabase
+  const [filteredJobs, setFilteredJobs] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Fetch jobs from Supabase
+    const fetchJobs = async () => {
+      const { data, error } = await supabase.from("jobs").select("*");
+      if (error) {
+        console.error("Error fetching jobs:", error);
+      } else {
+        setJobs(data);
+        setFilteredJobs(data);
+      }
+    };
+
+    fetchJobs();
+  }, []);
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
     setFilteredJobs(
       category === "View all"
-        ? defaultJobs
-        : defaultJobs.filter((job) => job.category === category)
+        ? jobs
+        : jobs.filter((job) => job.category === category)
     );
   };
 
-  const handleDeleteJob = (jobTitle) => {
-    setFilteredJobs((prevJobs) => prevJobs.filter((job) => job.title !== jobTitle));
+  const handleDeleteJob = async (jobId) => {
+    const { error } = await supabase.from("jobs").delete().eq("id", jobId);
+    if (error) {
+      console.error("Error deleting job:", error);
+    } else {
+      setFilteredJobs((prevJobs) => prevJobs.filter((job) => job.id !== jobId));
+      setJobs((prevJobs) => prevJobs.filter((job) => job.id !== jobId));
+    }
   };
 
   const handleEditJob = (job) => {
-    navigate(`/sidebar/jobs/edit`, { state: { job } });
+    return (
+      <>
+        <div className="header">
+          <div>
+            <h1>Jobs</h1>
+          </div>
+          <Button
+            type="primary"
+            className="add-job-btn"
+            onClick={() => navigate("/sidebar/jobs/create")}
+          >
+            + Add Job
+          </Button>
+        </div>
+
+        <div
+          className="job-title-section"
+          style={{ textAlign: "left", marginRight: "1010px" }}
+        >
+          <h2>Job Title</h2>
+        </div>
+
+        <p className="subtitle">Lorem Ipsum Lorem Ipsum</p>
+
+        <div className="categories">
+          {categories.map((category, i) => (
+            <span
+              key={i}
+              onClick={() => handleCategoryClick(category)}
+              className={selectedCategory === category ? "active-category" : ""}
+            >
+              {category}
+            </span>
+          ))}
+        </div>
+
+        <div className="job-grid">
+          {filteredJobs.length > 0 ? (
+            filteredJobs.map((job, i) => (
+              <JobCard
+                key={i}
+                job={job}
+                editIcon={groupIcon}
+                deleteIcon={deleteIcon}
+                onDelete={() => handleDeleteJob(job.id)}
+                onEdit={handleEditJob}
+              />
+            ))
+          ) : (
+            <div className="no-jobs">No jobs available</div>
+          )}
+        </div>
+      </>
+    );
   };
 
   return (
-    <main className="content">
+    <main>
       <div className="header">
         <div>
           <h1>Jobs</h1>
@@ -123,7 +202,7 @@ export default function JobListing() {
               job={job}
               editIcon={groupIcon}
               deleteIcon={deleteIcon}
-              onDelete={() => handleDeleteJob(job.title)}
+              onDelete={() => handleDeleteJob(job.id)}
               onEdit={handleEditJob}
             />
           ))

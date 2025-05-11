@@ -1,32 +1,57 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaEye as Eye, FaCheck as Check, FaTimes as X, FaTrashAlt as Trash2 } from "react-icons/fa"; // Import icons
-import "./ReadJobs.css"; // Import CSS for styling
+import { FaEye as Eye, FaCheck as Check, FaTimes as X, FaTrashAlt as Trash2 } from "react-icons/fa";
+import { createClient } from "@supabase/supabase-js"; // Import Supabase client
+import "./ReadJobs.css";
+
+// Initialize Supabase client
+const supabaseUrl = 'https://agbpojgpdponyeigrsfs.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFnYnBvamdwZHBvbnllaWdyc2ZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYxODk5NzUsImV4cCI6MjA2MTc2NTk3NX0.oWElgbY0Wk9gyFv9tH13pYCePHHQ1vbiqQNarf_zUko';
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 function ReadJobs() {
   const [activeSection, setActiveSection] = useState("about");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectAll, setSelectAll] = useState(false);
-  const [selectedCount, setSelectedCount] = useState(0); // New state to track the count of selected checkboxes
-  const [data, setData] = useState([
-    ...Array.from({ length: 100 }, (_, i) => ({
-      key: i + 1,
-      name: `User ${i + 1}`,
-      role: "Product Designer",
-      email: `user${i + 1}@example.com`,
-      phoneNumber: `+216 24 800 ${String(353 + i).padStart(3, "0")}`,
-      submissionDate: `02/${(i % 28) + 1}/2025 ${String(i % 24).padStart(2, "0")}:00`,
-      status: "Pending", // Replace all statuses with "Pending"
-      isChecked: false,
-    })),
-  ]);
+  const [selectedCount, setSelectedCount] = useState(0);
+  const [data, setData] = useState([]); // Initialize with an empty array
+  const [applications, setApplications] = useState([]); // State to store applications
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showApproveModal, setShowApproveModal] = useState(false);
   const [showRejectModal, setShowRejectModal] = useState(false);
   const rowsPerPage = 10;
   const navigate = useNavigate();
 
-  const allRecords = data; // Replace with actual data source
+  useEffect(() => {
+    // Fetch data from Supabase
+    const fetchData = async () => {
+      console.log("Fetching data from Supabase...");
+      const { data: jobs, error: jobsError } = await supabase.from("jobs").select("*");
+      const { data: applications, error: applicationsError } = await supabase.from("apply_job").select("*");
+
+      if (jobsError) {
+        console.error("Error fetching jobs:", jobsError);
+      } else {
+        console.log("Fetched jobs:", jobs); // Log the fetched jobs data
+        const formattedJobs = jobs.map((job) => ({
+          ...job,
+          isChecked: false,
+        }));
+        setData(formattedJobs);
+      }
+
+      if (applicationsError) {
+        console.error("Error fetching applications:", applicationsError);
+      } else {
+        console.log("Fetched applications:", applications); // Log the fetched applications data
+        setApplications(applications); // Store applications in state
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const allRecords = data;
 
   const toggleSelectAll = (checked) => {
     setSelectAll(checked);
@@ -129,8 +154,7 @@ function ReadJobs() {
         key={index}
         className={`btn page-btn ${page === currentPage ? "active" : ""}`}
         onClick={() => typeof page === "number" && handlePageChange(page)}
-        disabled={page === "..."}
-      >
+        disabled={page === "..."}>
         {page}
       </button>
     ));
@@ -141,6 +165,56 @@ function ReadJobs() {
   const currentRows = data.slice(indexOfFirstRow, indexOfLastRow); // Use `data` for pagination
   const totalPages = Math.ceil(data.length / rowsPerPage);
 
+  const handleApprove = async (id) => {
+    try {
+      const { error } = await supabase
+        .from("apply_job")
+        .update({ status: "Approved" }) // Update status to "Approved"
+        .eq("id", id); // Match the row by ID
+
+      if (error) {
+        console.error("Error approving application:", error);
+        alert("Failed to approve the application.");
+      } else {
+        // Update the applications state locally
+        setApplications((prev) =>
+          prev.map((app) =>
+            app.id === id ? { ...app, status: "Approved" } : app
+          )
+        );
+        alert("Application approved successfully!");
+      }
+    } catch (err) {
+      console.error("Unexpected error:", err);
+      alert("An unexpected error occurred.");
+    }
+  };
+
+  const handleReject = async (id) => {
+    try {
+      const { error } = await supabase
+        .from("apply_job")
+        .update({ status: "Rejected" }) // Update status to "Rejected"
+        .eq("id", id); // Match the row by ID
+
+      if (error) {
+        console.error("Error rejecting application:", error);
+        alert("Failed to reject the application.");
+      } else {
+        // Update the applications state locally
+        setApplications((prev) =>
+          prev.map((app) =>
+            app.id === id ? { ...app, status: "Rejected" } : app
+          )
+        );
+        alert("Application rejected successfully!");
+      }
+    } catch (err) {
+      console.error("Unexpected error:", err);
+      alert("An unexpected error occurred.");
+    }
+  };
+
   return (
     <div className="read-jobs-container">
       <button className="back-button" onClick={() => navigate(-1)}>
@@ -149,9 +223,13 @@ function ReadJobs() {
       <div className="header-section">
         <div className="job-icon"></div>
         <div className="job-title">
-          <h1>Ui/Ux design</h1>
+          <h1>{data.length > 0 ? data.job_name : "Loading..."}</h1> {/* Display job_name dynamically */}
         </div>
-        <button className="view-portfolio-btn">+ View submissions </button>
+        <button 
+          className="view-portfolio-btn" 
+          onClick={() => navigate("/CreateClient")}>
+          + View submissions
+        </button>
       </div>
 
       <div className="tabs-section">
@@ -175,8 +253,7 @@ function ReadJobs() {
             width: "84px",
             height: "48px",
             cursor: "pointer",
-          }}
-        >
+          }}>
           <span>Job</span>
           <span>brief</span>
         </button>
@@ -191,8 +268,7 @@ function ReadJobs() {
             backgroundColor: activeSection === "members" ? "#F9F5FF" : "transparent",
             color: activeSection === "members" ? "#6B46C1" : "#6B46C1",
             fontWeight: activeSection === "members" ? "bold" : "normal",
-          }}
-        >
+          }}>
           Members
         </button>
         <button
@@ -204,20 +280,24 @@ function ReadJobs() {
             padding: "8px 12px",
             backgroundColor: "transparent",
             color: "#6B46C1",
-          }}
-        >
+          }}>
           Dummy
         </button>
       </div>
       {activeSection === "about" && (
         <div className="about-section">
           <h2>Job overview</h2>
-          <p>A short summary of the job (truncated if too long).</p>
-          <div className="job-overview">
-            <p>
-              Mi tincidunt elit, id quisque ligula ac diam, amet. Vel etiam suspendisse morbi eleifend faucibus eget vestibulum felis. Dictum quis montes, sit sit. Tellus aliquam enim urna, etiam. Mauris posuere.
-            </p>
-          </div>
+          {data.length > 0 ? (
+            <div className="job-overview">
+              <p><strong>Job Name:</strong> {data[currentPage ]?.job_name}</p> {/* Display job_name dynamically */}
+              <p><strong>Description:</strong> {data[currentPage ]?.description || "No description available."}</p> {/* Display description */}
+              <p><strong>Submission Date:</strong> {data[currentPage]?.submissionDate}</p> {/* Display submission date */}
+              <p><strong>Status:</strong> {data[currentPage ]?.status}</p> {/* Display status */}
+            </div>
+          ) : (
+            // Fallback while data is loading
+            <p>Loading job details...</p>
+          )}
           <h2>About the Job</h2>
           <p>
             Dolor enim eu tortor urna sed duis nulla. Aliquam vestibulum, nulla odio nisl vitae. In aliquet pellentesque aenean hac vestibulum turpis mi bibendum diam. Tempor integer aliquam in vitae malesuada fringilla. Elit nisi in eleifend sed nisi. Pulvinar at orci, proin imperdiet commodo consectetur convallis risus.
@@ -231,202 +311,94 @@ function ReadJobs() {
       )}
       {activeSection === "members" && (
         <div className="members-section">
-          {selectedCount > 0 && ( // Show green bar if any checkbox is selected
-            <div
-              className="green-bar"
-              style={{
-                display: "flex", // Add flexbox for alignment
-                justifyContent: "space-between", // Space between text and icon
-                alignItems: "center", // Center items vertically
-                backgroundColor: "#D1FADF", // Green background
-                color: "#027A48", // Green text
-                padding: "16px",
-                fontFamily: "'Inter', sans-serif",
-                fontWeight: "600",
-                fontSize: "16px",
-                lineHeight: "24px",
-                borderRadius: "8px",
-                marginBottom: "16px",
-              }}
-            >
-              <span>
-                {selectedCount} item{selectedCount > 1 ? "s" : ""} selected
-              </span>
-              <button
-                className="delete-icon-btn"
-                onClick={openDeleteModal} // Open delete modal
-                style={{
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  color: "#027A48",
-                }}
-              >
-                <Trash2 size={16} />
-              </button>
-            </div>
-          )}
-          <table className="registrations-table">
-            {!selectedCount && ( // Show "Latest Registrations" header if no checkbox is selected
+          <h2 style={{ fontSize: "18px", fontWeight: "600", color: "#101828", marginBottom: "16px", marginRight: "650px" }}>
+            Latest Registrations
+          </h2>
+          {applications.length > 0 ? (
+            <table className="members-table" style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
-                <tr>
-                  <th colSpan="7" className="table-header-title" style={{
-                    backgroundColor: "#FFFFFF", // Base/White
-                    borderBottom: "1px solid #E0E0E0", // Accent line (if needed)
-                    fontFamily: "'Inter', sans-serif",
-                    fontWeight: "600",
-                    fontSize: "16px",
-                    lineHeight: "24px",
-                    color: "#101828",
-                    textAlign: "left",
-                    padding: "16px",
-                  }}>
-                    Latest Registrations
+                <tr style={{ backgroundColor: "#F9FAFB", textAlign: "left" }}>
+                  <th style={{ padding: "12px", fontWeight: "600", fontSize: "14px", color: "#667085" }}>
+                    <input type="checkbox" />
                   </th>
+                  <th style={{ padding: "12px", fontWeight: "600", fontSize: "14px", color: "#667085" }}>Name</th>
+                  <th style={{ padding: "12px", fontWeight: "600", fontSize: "14px", color: "#667085" }}>Email address</th>
+                  <th style={{ padding: "12px", fontWeight: "600", fontSize: "14px", color: "#667085" }}>Phone Number</th>
+                  <th style={{ padding: "12px", fontWeight: "600", fontSize: "14px", color: "#667085" }}>Submission Date</th>
+                  <th style={{ padding: "12px", fontWeight: "600", fontSize: "14px", color: "#667085" }}>Status</th>
+                  <th style={{ padding: "12px", fontWeight: "600", fontSize: "14px", color: "#667085" }}>Actions</th>
                 </tr>
               </thead>
-            )}
-            <thead>
-              <tr>
-                <th>
-                  <input
-                    type="checkbox"
-                    checked={selectAll}
-                    onChange={(e) => toggleSelectAll(e.target.checked)}
-                  />
-                </th>
-                <th>Name</th>
-                <th>Email Address</th>
-                <th>Phone Number</th>
-                <th>Submission Date</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentRows.length > 0 ? (
-                currentRows.map((item) => (
-                  <tr key={item.key}>
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={item.isChecked || false}
-                        onChange={() => toggleCheckbox(item.key)}
-                      />
+              <tbody>
+                {applications.map((application) => (
+                  <tr key={application.id} style={{ borderBottom: "1px solid #E4E7EC" }}>
+                    <td style={{ padding: "12px" }}>
+                      <input type="checkbox" />
                     </td>
-                    <td className="name-cell">
-                      <div className="avatar"></div>
+                    <td style={{ padding: "12px", display: "flex", alignItems: "center", gap: "12px" }}>
+                      
                       <div>
-                        <p>{item.name}</p>
-                        <p className="role">{item.role}</p>
+                        <p style={{ margin: 0, fontWeight: "500", fontSize: "14px", color: "#101828" }}>
+                          {application.first_name} {application.last_name}
+                        </p>
+                        <p style={{ margin: 0, fontSize: "12px", color: "#667085" }}>{application.role}</p>
                       </div>
                     </td>
-                    <td>{item.email}</td>
-                    <td>{item.phoneNumber}</td>
-                    <td>{item.submissionDate}</td>
-                    <td className={`status ${item.status.toLowerCase()}`}>
-                      {item.status}
+                    <td style={{ padding: "12px", fontSize: "14px", color: "#101828" }}>{application.email}</td>
+                    <td style={{ padding: "12px", fontSize: "14px", color: "#101828" }}>{application.phone || "N/A"}</td>
+                    <td style={{ padding: "12px", fontSize: "14px", color: "#101828" }}>{application.submission_date || "N/A"}</td>
+                    <td style={{ padding: "12px" }}>
+                      <span
+                        style={{
+                          padding: "4px 8px",
+                          borderRadius: "16px",
+                          backgroundColor: application.status === "Approved" ? "#ECFDF3" : "#FEF3F2",
+                          color: application.status === "Approved" ? "#027A48" : "#B42318",
+                          fontSize: "12px",
+                          fontWeight: "500",
+                        }}>
+                        {application.status || "Pending"}
+                      </span>
                     </td>
-                    <td className="actions">
-                      <div className="action-buttons">
-                        <button className="action-btn view-btn" onClick={() => handleViewMore(item.key)}>
-                          <Eye size={16} />
-                        </button>
-                        <button className="action-btn approve-btn" onClick={() => openApproveModal(item.key)}>
-                          <Check size={16} />
-                        </button>
-                        <button className="action-btn reject-btn" onClick={() => openRejectModal(item.key)}>
-                          <X size={16} />
-                        </button>
-                      </div>
+                    <td style={{ padding: "12px", display: "flex", gap: "8px" }}>
+                      <button
+                        onClick={() => handleApprove(application.id)}
+                        style={{
+                          backgroundColor: "transparent",
+                          border: "none",
+                          cursor: "pointer",
+                          color: "#6941C6",
+                        }}>
+                        <Eye />
+                      </button>
+                      <button
+                        onClick={() => handleApprove(application.id)}
+                        style={{
+                          backgroundColor: "transparent",
+                          border: "none",
+                          cursor: "pointer",
+                          color: "#12B76A",
+                        }}>
+                        <Check />
+                      </button>
+                      <button
+                        onClick={() => handleReject(application.id)}
+                        style={{
+                          backgroundColor: "transparent",
+                          border: "none",
+                          cursor: "pointer",
+                          color: "#F04438",
+                        }}>
+                        <X />
+                      </button>
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="7" className="no-data">
-                    No data available.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-          {showDeleteModal && (
-            <div className="modal-overlay">
-              <div className="modal">
-                <Trash2 size={24} className="modal-icon" />
-                <h2>Are you sure you want to delete?</h2>
-                <p>This action cannot be undone.</p>
-                <div className="modal-actions">
-                  <button className="btn cancel-btn" onClick={closeDeleteModal}>
-                    Cancel
-                  </button>
-                  <button className="btn delete-btn" onClick={confirmDelete}>
-                    Delete
-                  </button>
-                </div>
-              </div>
-            </div>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p>No data available.</p>
           )}
-          {showApproveModal && (
-            <div className="modal-overlay">
-              <div className="modal">
-                <Check size={24} className="modal-icon-approve" />
-                <h2>Are you sure you want to Approve?</h2>
-                <p>This action will approve the selected request.</p>
-                <div className="modal-actions">
-                  <button className="btn cancel-btn" onClick={closeApproveModal}>
-                    Cancel
-                  </button>
-                  <button
-                    className="btn approve-btn"
-                    onClick={() => confirmApprove(showApproveModal)} // Pass the key
-                  >
-                    Approve
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-          {showRejectModal && (
-            <div className="modal-overlay">
-              <div className="modal">
-                <X size={24} className="modal-icon-reject" />
-                <h2>Are you sure you want to Reject?</h2>
-                <p>This action will reject the selected request.</p>
-                <div className="modal-actions">
-                  <button className="btn cancel-btn" onClick={closeRejectModal}>
-                    Cancel
-                  </button>
-                  <button
-                    className="btn reject-btn"
-                    onClick={() => confirmReject(showRejectModal)} // Pass the key
-                  >
-                    Reject
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-          <footer className="registrations-footer">
-            <button
-              className="btn pagination-btn"
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              ← Previous
-            </button>
-            <div className="page-numbers">
-              {renderPageNumbers()}
-            </div>
-            <button
-              className="btn pagination-btn"
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === Math.ceil(allRecords.length / rowsPerPage)}
-            >
-              Next →
-            </button>
-          </footer>
         </div>
       )}
     </div>
