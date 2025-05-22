@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 import authimage from './assets/outhimage.png';
 import { Link, useNavigate } from 'react-router-dom';
-import { supabase } from './supabaseClient';
+import supabase from './supabaseClient'; // ✅ import par défaut
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -21,13 +21,19 @@ export default function Login() {
       if (error) throw error;
 
       console.log('User signed in:', data);
-      navigate('/sidebar'); 
+      // Use React's startTransition for navigation to avoid React Router v7 warning
+      if (window.React && React.startTransition) {
+        React.startTransition(() => {
+          navigate('/sidebar', { replace: true }); // use replace to avoid back navigation to login
+        });
+      } else {
+        navigate('/sidebar', { replace: true });
+      }
     } catch (error) {
       console.error('Error signing in:', error.message);
       setError(error.message);
     }
   };
-
   return (
     <div className='main-container'>
       

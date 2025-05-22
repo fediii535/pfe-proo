@@ -3,52 +3,54 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./Login";
 import Signup from "./SignUp";
 import Sidebar from "./Sidebar";
-import Home from "./Home";
-import Registrations from "./Registrations";
-import Leaves from "./Leaves";
-import Jobs from "./Jobs"; 
-import JobCreate from "./JobCreate";
-import Recording from "./Recording";
-import Settings from "./Settings";
-import Employee from "./Employee";
-import LeaveRequestForm from "./LeaveRequestForm"; 
-import ReadJobs from "./ReadJobs"; // Import ReadJobs component
-import VueMore from "./ViewMore"; // Import VueMore component
-import ViewMore from "./ViewMore"; // Import the new component
-import CreateClient from "./CreateClient"; // Import CreateClient component
+import Home from "../src/pages/Home/Home";
+import Registrations from "../src/pages/registrations/Registrations";
+import Leaves from "../src/pages/leaves/Leaves";
+import Jobs from "../src/pages/jobs/Jobs"; 
+import JobCreate from "../src/pages/jobs/JobCreate";
+import Recording from "../src/pages/recording/Recording";
+import Settings from "../src/pages/Settings/Settings";
+import Employee from "../src/pages/Employee/Employee";
+import LeaveRequestForm from "../src/pages/Home/LeaveRequestForm"; 
+import ReadJobs from "../src/pages/jobs/ReadJobs";
+import ViewMore from "./ViewMore";
+import CreateClient from "./pages/Employee/CreateEmployee";
+import Dashbord from './Dashbord';
+import PrivateRoute from "./PrivateRoute"; // import du composant
+
+// IMPORTANT: Ensure Supabase client is initialized ONCE in your app (singleton pattern).
+// Only import the client from a single source (e.g., src/supabase/SupaBase.js) everywhere.
+// Do NOT call createClient() in multiple files or components.
 
 function App() {
   return (
     <Router basename="/pfe-prOo">
       <Routes>
+        {/* Routes publiques */}
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
-        {/* Routes protégées avec Sidebar */}
-        <Route path="/sidebar" element={<Sidebar />}>
-          <Route index element={<Home />} />
-          <Route path="home" element={<Home />} />
-          <Route path="registrations" element={<Registrations />} />
-          <Route path="leaves" element={<Leaves />} />
-          <Route path="jobs" element={<Jobs />} />
-          <Route path="jobs/create" element={<JobCreate />} />
-          <Route path="jobs/read" element={<ReadJobs />} /> {/* Add route for ReadJobs */}
-          <Route path="recording" element={<Recording />} />
-          <Route path="settings" element={<Settings />} />
-          <Route path="employee" element={<Employee />} />
+        {/* Routes protégées */}
+        <Route element={<PrivateRoute />}>
+          <Route path="/sidebar" element={<Sidebar />}>
+            <Route index element={<Home />} />
+            <Route path="home" element={<Home />} />
+            <Route path="registrations" element={<Registrations />} />
+            <Route path="leaves" element={<Leaves />} />
+            <Route path="jobs" element={<Jobs />} />
+            <Route path="jobs/create" element={<JobCreate />} />
+            <Route path="jobs/read" element={<ReadJobs />} />
+            <Route path="recording" element={<Recording />} />
+            <Route path="settings" element={<Settings />} />
+            <Route path="employee" element={<Employee />} />
+            <Route path="dashbord" element={<Dashbord />} />
+            <Route path="vue-more/:key" element={<ViewMore />} />
+          </Route>
+
+          <Route path="/leave-request" element={<LeaveRequestForm />} />
+          <Route path="/view-more/:key" element={<ViewMore />} />
+          <Route path="/CreateClient" element={<CreateClient />} />
         </Route>
-
-        {/* Route pour la page Leave Request */}
-        <Route path="/leave-request" element={<LeaveRequestForm />} />
-
-        {/* Route for VueMore */}
-        <Route path="/vue-more/:key" element={<VueMore />} />
-
-        {/* Route for ViewMore */}
-        <Route path="/view-more/:key" element={<ViewMore />} />
-
-        {/* Route for CreateClient */}
-        <Route path="/CreateClient" element={<CreateClient />} /> {/* Add route for CreateClient */}
       </Routes>
     </Router>
   );

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Settings.css';
+import '../Settings/Settings.css';
 import { Input, Dropdown, Menu, Select, DatePicker } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { createClient } from '@supabase/supabase-js';
@@ -31,18 +31,25 @@ const Settings = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    setImageFile(file);
     if (file) {
+      setImageFile(file);
       const reader = new FileReader();
-      reader.onload = () => setImagePreview(reader.result);
+      reader.onload = () => setImagePreview(reader.result); // Dynamically set preview
       reader.readAsDataURL(file);
-      setUploadBgColor('#d4edda'); // Set upload field background to cool green
-      setFormRowBgColor('#d4edda'); // Set form-row background to cool green
+      setUploadBgColor('#d4edda'); // Set upload field background to green
+      setFormRowBgColor('#d4edda'); // Set form-row background to green
+    } else {
+      setImagePreview(null); // Reset preview if no file is selected
+      setUploadBgColor(''); // Reset background color
+      setFormRowBgColor(''); // Reset form-row background color
     }
   };
 
   const handleImageUpload = async () => {
-    if (!imageFile) return null;
+    if (!imageFile) {
+      toast.error('Please select an image to upload.');
+      return null;
+    }
 
     const fileName = `${Date.now()}_${imageFile.name}`;
     const { data, error } = await supabase.storage
@@ -51,10 +58,12 @@ const Settings = () => {
 
     if (error) {
       console.error('Error uploading image:', error);
+      toast.error('Failed to upload the image. Please try again.');
       return null;
     }
 
     const { publicURL } = supabase.storage.from('job-images').getPublicUrl(fileName);
+    toast.success('Image uploaded successfully!');
     return publicURL;
   };
 
@@ -116,9 +125,9 @@ const Settings = () => {
 
   // Options for Department
   const departmentOptions = [
-    { value: 'Marketing', label: 'Marketing' },
+    { value: 'Informatics', label: 'Informatics' },
+    { value: 'Business', label: 'Business' },
     { value: 'Design', label: 'Design' },
-    { value: 'Developer', label: 'Developer' },
   ];
 
   const handleChange = (value) => {
@@ -197,7 +206,7 @@ const Settings = () => {
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={handleImageChange}
+                    onChange={handleImageChange} // Dynamically handle image change
                   />
                   <p>Click to upload <span>or drag and drop</span></p>
                   <p className="file-types">SVG, PNG, JPG or GIF (max. 800×400px)</p>
@@ -246,7 +255,7 @@ const Settings = () => {
         {/* Buttons */}
         <div className="button-group">
           <button className="cancel-button">Cancel</button>
-          <button className="save-button" onClick={handleSave}>Save</button>
+          <button className="save-button" onClick={handleSave}>Save</button> {/* Ensure handleSave is called */}
         </div>
       </section>
 

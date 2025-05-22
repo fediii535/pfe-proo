@@ -1,14 +1,12 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
-import Sidebar from "./Sidebar"; // <-- ajoute cette ligne !!
+import Sidebar from "./Sidebar";
+import "./Layout.css";
 
-function Layout() {
+function Layout({ children }) {
   return (
-    <div className="layout">
+    <div className="layout-root">
       <Sidebar />
-      <div className="content">
-        <Outlet />
-      </div>
+      <main className="main-content">{children}</main>
     </div>
   );
 }

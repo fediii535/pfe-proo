@@ -6,40 +6,61 @@ import {
   User,
   Settings as SettingsIcon,
   Scale,
-  Search,
   Trash2,
   Edit2,
 } from "lucide-react";
 import "./Home.css";
-import sickIcon from "./assets/image.png";
-import personalIcon from "./assets/image1.png";
-import casualIcon from "./assets/image2.png";
-import vacationIcon from "./assets/image3.png";
+import image from "../../assets/image.png";
+import image1 from "../../assets/image1.png";
+import image2 from "../../assets/image2.png";
+import image3 from "../../assets/image3.png";
 import { DatePicker, Modal, Select, Button } from "antd";
-import { useNavigate } from "react-router-dom"; // AJOUTER ÇA
+import { useNavigate } from "react-router-dom";
+import { createClient } from "@supabase/supabase-js";
+
+const supabaseUrl = 'https://agbpojgpdponyeigrsfs.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFnYnBvamdwZHBvbnllaWdyc2ZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYxODk5NzUsImV4cCI6MjA2MTc2NTk3NX0.oWElgbY0Wk9gyFv9tH13pYCePHHQ1vbiqQNarf_zUko';
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 const Home = () => {
-  const navigate = useNavigate(); // AJOUTER ÇA
-
+  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [leaveData, setLeaveData] = useState(() => {
-    const savedData = localStorage.getItem("leaveData");
-    return savedData ? JSON.parse(savedData) : [];
-  });
-
+  const [leaveData, setLeaveData] = useState([]);
   const [formData, setFormData] = useState({
     fromDate: "",
     toDate: "",
     type: "",
     description: "",
   });
-
   const [selectedRows, setSelectedRows] = useState([]);
   const [menuVisible, setMenuVisible] = useState(null);
 
+  const { RangePicker } = DatePicker;
+
+  // 🔄 Fetch depuis Supabase
+  const fetchLeaveRequests = async () => {
+    const { data, error } = await supabase
+      .from("leaverequest")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Erreur lors du fetch des leaves:", error.message);
+    } else {
+      const formattedData = data.map((item) => ({
+        fromDate: item.from_date,
+        toDate: item.to_date,
+        type: item.type,
+        status: item.status,
+        description: item.description,
+      }));
+      setLeaveData(formattedData);
+    }
+  };
+
   useEffect(() => {
-    localStorage.setItem("leaveData", JSON.stringify(leaveData));
-  }, [leaveData]);
+    fetchLeaveRequests();
+  }, []);
 
   const openModal = () => setIsModalOpen(true);
   const handleCancel = () => setIsModalOpen(false);
@@ -54,18 +75,33 @@ const Home = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (formData.fromDate && formData.toDate && formData.type) {
-      setLeaveData([
-        {
-          fromDate: formData.fromDate,
-          toDate: formData.toDate,
-          type: formData.type,
-          status: "Pending",
-        },
-        ...leaveData,
-      ]);
-      closeModal();
+      try {
+        const { data, error } = await supabase
+          .from("leaverequest")
+          .insert([
+            {
+              from_date: formData.fromDate,
+              to_date: formData.toDate,
+              type: formData.type,
+              description: formData.description,
+              status: "Pending",
+            },
+          ]);
+
+        if (error) {
+          console.error("Error inserting data:", error.message);
+          alert("Failed to submit leave request.");
+        } else {
+          alert("Leave request submitted successfully!");
+          await fetchLeaveRequests(); // 🔁 Rafraîchir après insert
+          closeModal();
+        }
+      } catch (err) {
+        console.error("Unexpected error:", err);
+        alert("An unexpected error occurred.");
+      }
     } else {
       alert("Please fill in all required fields.");
     }
@@ -108,13 +144,13 @@ const Home = () => {
   const getIcon = (type) => {
     switch (type) {
       case "Vacation":
-        return <img src={vacationIcon} alt="Vacation Icon" className="card-icon sun" />;
+        return <img src={image3} alt="Vacation Icon" className="card-icon sun" />;
       case "Casual":
-        return <img src={casualIcon} alt="Casual Icon" className="card-icon alert" />;
+        return <img src={image2} alt="Casual Icon" className="card-icon alert" />;
       case "Personal":
-        return <img src={personalIcon} alt="Personal Icon" className="card-icon lock" />;
+        return <img src={image1} alt="Personal Icon" className="card-icon lock" />;
       case "Sick":
-        return <img src={sickIcon} alt="Sick Icon" className="card-icon medical" />;
+        return <img src={image} alt="Sick Icon" className="card-icon medical" />;
       default:
         return null;
     }
@@ -124,14 +160,12 @@ const Home = () => {
     return leaveData.filter((leave) => leave.type === type).length;
   };
 
-  const { RangePicker } = DatePicker;
-
   const goToSettings = () => {
-    navigate("/sidebar/settings"); // REDIRECTION
+    navigate("/sidebar/settings");
   };
 
   const goToViewMore = (key) => {
-    navigate(`/view-more/${key}`); // Passez un paramètre "key"
+    navigate(`/view-more/${key}`);
   };
 
   return (
@@ -140,8 +174,8 @@ const Home = () => {
         <div className="page-title-container">
           <h1 className="page-title">Home</h1>
         </div>
+
         <div className="leave-balance-cards">
-          {/* Cartes */}
           {["Vacation", "Casual", "Personal", "Sick"].map((type) => (
             <div className="card" key={type}>
               <div className="card-header">
@@ -159,10 +193,7 @@ const Home = () => {
           {selectedRows.length > 0 ? (
             <div className="selection-bar">
               <span>{selectedRows.length} selected</span>
-              <Trash2
-                className="delete-icon"
-                onClick={handleDelete}
-              />
+              <Trash2 className="delete-icon" onClick={handleDelete} />
             </div>
           ) : (
             <div className="latest-leaves-header">
@@ -201,22 +232,32 @@ const Home = () => {
                     />
                   </td>
                   <td>{new Date().toLocaleString()}</td>
+                  <td>{leave.fromDate} to {leave.toDate}</td>
+                  <td className="leave-type">{getIcon(leave.type)} {leave.type}</td>
                   <td>
-                    {leave.fromDate} to {leave.toDate}
-                  </td>
-                  <td className="leave-type">
-                    {getIcon(leave.type)} {leave.type}
-                  </td>
-                  <td>
-                    <span className="status pending">{leave.status}</span>
+                    <span
+                      className={`status ${
+                        leave.status === "Approved"
+                          ? "approved"
+                          : leave.status === "Rejected"
+                          ? "rejected"
+                          : "pending"
+                      }`}
+                      style={{
+                        color:
+                          leave.status === "Approved"
+                            ? "green"
+                            : leave.status === "Rejected"
+                            ? "red"
+                            : "inherit",
+                      }}
+                    >
+                      {leave.status}
+                    </span>
                   </td>
                   <td>
                     <div className="actions-menu">
-                      <span
-                        className="menu-dots"
-                        onClick={() => toggleMenu(index)}
-                        style={{ cursor: "pointer", marginLeft: "10px" }}
-                      >
+                      <span className="menu-dots" onClick={() => toggleMenu(index)} style={{ cursor: "pointer", marginLeft: "10px" }}>
                         ⋮
                       </span>
                       {menuVisible === index && (
@@ -245,33 +286,23 @@ const Home = () => {
           <h3>Farouk Abichou</h3>
           <p>Software Developer</p>
           <div className="profile-actions">
-            <button className="settings-btn" onClick={goToSettings}>
-              Settings
-            </button>
-            <button className="view-profile-btn" onClick={() => goToViewMore("example-key")}>
-              View profile
-            </button>
+            <button className="settings-btn" onClick={goToSettings}>Settings</button>
+            <button className="view-profile-btn" onClick={() => goToViewMore("example-key")}>View profile</button>
           </div>
         </div>
-
         <div className="balance-section">
           <div>
             <h3>Balance</h3>
             <div className="balance-value">{leaveData.length}</div>
           </div>
           <div>
-            <div className="balance-icon">
-              <Scale />
-            </div>
+            <div className="balance-icon"><Scale /></div>
           </div>
         </div>
-
-        <button className="apply-btn" onClick={openModal}>
-          Apply for leave
-        </button>
+        <button className="apply-btn" onClick={openModal}>Apply for leave</button>
       </div>
 
-      {/* Modal pour ajouter leave */}
+      {/* Modal pour leave */}
       <Modal
         title="Apply For Leave"
         open={isModalOpen}
@@ -310,7 +341,6 @@ const Home = () => {
             onChange={handleInputChange}
             style={{ width: "100%", height: "80px", resize: "none" }}
           />
-          
         </div>
         <div className="footer-container">
           <Button onClick={closeModal}>Cancel</Button>

@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "antd";
 import { createClient } from "@supabase/supabase-js"; // Import Supabase client
 import "./Jobs.css";
-import groupIcon from "./assets/Group.png"; // ✅ Icone Edit
-import deleteIcon from "./assets/Delete.png"; // ✅ Icone Delete
+import groupIcon from "../../assets/Group.png"; // ✅ Icone Edit
+import deleteIcon from "../../assets/Delete.png"; // ✅ Icone Delete
 
 // Initialize Supabase client
 const supabaseUrl = 'https://agbpojgpdponyeigrsfs.supabase.co';
@@ -20,13 +20,13 @@ function JobCard({ job, editIcon, deleteIcon, onDelete, onEdit }) {
     <div className="job-card">
       <div className="job-header">
         <div className="job-icon"></div>
-        <h3>{job.title}</h3>
+        <h3>{job.job_name}</h3> {/* Display job_name here */}
         <div className="job-actions">
           <img
             src={editIcon}
             alt="Edit"
             className="job-icon-btn edit"
-            onClick={() => onEdit(job)}
+            onClick={() => navigate("/sidebar/jobs/create")}
           />
           <img
             src={deleteIcon}
@@ -44,11 +44,11 @@ function JobCard({ job, editIcon, deleteIcon, onDelete, onEdit }) {
           backgroundColor: new Date(job.deadline) < new Date() ? "#ffcccc" : "#ccffcc", // Green background for "open"
           color: new Date(job.deadline) < new Date() ? "red" : "green", // Green text for "open"
           padding: "2px 5px",
-          borderRadius: "4px"
+          borderRadius: "4px",
         }}
       >
-        {new Date(job.deadline) < new Date() ? "closed" : "open"}
-      </span>
+        {new Date(job.deadline) < new Date() ? "Closed" : "Open"}
+      </span> {/* Match status logic with ReadJobs */}
       <hr />
       <div
         className="job-footer"
@@ -68,14 +68,17 @@ export default function JobListing() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch jobs from Supabase
     const fetchJobs = async () => {
-      const { data, error } = await supabase.from("jobs").select("*");
-      if (error) {
-        console.error("Error fetching jobs:", error);
-      } else {
-        setJobs(data);
-        setFilteredJobs(data);
+      try {
+        const { data, error } = await supabase.from("jobs").select("*, job_name");
+        if (error) {
+          console.error("Error fetching jobs:", error);
+        } else {
+          setJobs(data); // Set all jobs in state
+          setFilteredJobs(data); // Default to all jobs
+        }
+      } catch (err) {
+        console.error("Unexpected error fetching jobs:", err);
       }
     };
 
@@ -84,11 +87,13 @@ export default function JobListing() {
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
-    setFilteredJobs(
-      category === "View all"
-        ? jobs
-        : jobs.filter((job) => job.category === category)
-    );
+    setFilteredJobs(() => {
+      if (category === "View all") return jobs;
+      if (category === "Business") return jobs.filter((job) => job.category === "Business");
+      if (category === "Design") return jobs.filter((job) => job.category === "Design");
+      if (category === "Informatics") return jobs.filter((job) => job.category === "Devoloper");
+      return [];
+    });
   };
 
   const handleDeleteJob = async (jobId) => {

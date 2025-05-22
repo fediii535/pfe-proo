@@ -2,31 +2,27 @@ import React, { useState } from 'react';
 import './Signup.css';
 import authimage from './assets/outhimage.png';
 import { Link, useNavigate } from 'react-router-dom';
-import { supabase } from './supabaseClient';
+import supabase from './supabaseClient'; // ✅ import par défaut
 
 export default function Signup() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false); // Empêche les soumissions multiples
-  const [attempts, setAttempts] = useState(0); // Suivi des tentatives
+  const [isLoading, setIsLoading] = useState(false);
+  const [attempts, setAttempts] = useState(0);
 
   const navigate = useNavigate();
 
-  // Fonction pour introduire un délai
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Empêche la soumission si le formulaire est déjà en cours
     if (isLoading) return;
 
-    setIsLoading(true); // Démarre le chargement
-    setAttempts((prev) => prev + 1); // Compte les tentatives d'inscription
+    setIsLoading(true);
+    setAttempts((prev) => prev + 1);
 
-    // Limite les tentatives d'inscription
     if (attempts >= 3) {
       setError('Trop de tentatives. Veuillez réessayer plus tard.');
       setIsLoading(false);
@@ -34,23 +30,18 @@ export default function Signup() {
     }
 
     try {
-      await delay(5000); // Attendre 5 secondes avant de soumettre pour éviter la limitation
+      await delay(5000);
 
-      // 1. Création du compte utilisateur avec Supabase Auth
-      const { data, error } = await supabase.auth.signUp(
-        {
-          email,
-          password,
-          options: {
-            data: {
-              first_name: name,
-              
-            }
-          }
-        }
-      )
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            first_name: name,
+          },
+        },
+      });
 
-      // Gestion des erreurs
       if (error) {
         if (error.message.includes('rate limit exceeded')) {
           setError('Trop de tentatives. Veuillez réessayer plus tard.');
@@ -61,16 +52,15 @@ export default function Signup() {
       }
 
       alert('Compte créé avec succès ! Veuillez vérifier votre email pour confirmation.');
-
-      // 2. Rediriger vers la page de connexion
       navigate('/');
     } catch (error) {
       console.error('Erreur lors de l\'inscription :', error.message);
       setError(error.message);
     } finally {
-      setIsLoading(false); // Fin du chargement
+      setIsLoading(false);
     }
   };
+
 
   return (
     <div className="signup-main-container">

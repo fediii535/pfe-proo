@@ -52,8 +52,6 @@ const LeaveRequestForm = () => {
             <p className="hint">Choose the type of leave.</p>
           </div>
 
-         
-
           <div className="form-buttons">
             <button
               type="button"

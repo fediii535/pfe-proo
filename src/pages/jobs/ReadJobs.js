@@ -36,6 +36,7 @@ function ReadJobs() {
         const formattedJobs = jobs.map((job) => ({
           ...job,
           isChecked: false,
+          status: new Date(job.deadline) < new Date() ? "Closed" : "Open", // Dynamic status logic
         }));
         setData(formattedJobs);
       }
@@ -50,8 +51,6 @@ function ReadJobs() {
 
     fetchData();
   }, []);
-
-  const allRecords = data;
 
   const toggleSelectAll = (checked) => {
     setSelectAll(checked);
@@ -132,7 +131,7 @@ function ReadJobs() {
   };
 
   const renderPageNumbers = () => {
-    const totalPages = Math.ceil(allRecords.length / rowsPerPage);
+    const totalPages = Math.ceil(data.length / rowsPerPage);
     const pageNumbers = [];
 
     if (totalPages <= 5) {
@@ -219,12 +218,27 @@ function ReadJobs() {
     <div className="read-jobs-container">
       <button className="back-button" onClick={() => navigate(-1)}>
         ← Go Back
-      </button>
+      </button> 
       <div className="header-section">
         <div className="job-icon"></div>
         <div className="job-title">
-          <h1>{data.length > 0 ? data.job_name : "Loading..."}</h1> {/* Display job_name dynamically */}
+        <h1> {data[currentPage]?.job_name}</h1> {/* Display job_name dynamically */}
         </div>
+      
+        <p>
+          <strong>Status:</strong>{" "}
+          <span
+            className="job-status"
+            style={{
+              backgroundColor: new Date(data?.deadline) < new Date() ? "#ffcccc" : "#ccffcc", // Green background for "open"
+              color: new Date(data?.deadline) < new Date() ? "red" : "green", // Green text for "open"
+              padding: "2px 5px",
+              borderRadius: "4px",
+            }}
+          >
+            {new Date(data?.deadline) < new Date() ? "Closed" : "Open"}
+          </span>
+        </p> {/* Display status dynamically */}
         <button 
           className="view-portfolio-btn" 
           onClick={() => navigate("/CreateClient")}>
@@ -284,24 +298,35 @@ function ReadJobs() {
           Dummy
         </button>
       </div>
+
       {activeSection === "about" && (
         <div className="about-section">
           <h2>Job overview</h2>
           {data.length > 0 ? (
             <div className="job-overview">
-              <p><strong>Job Name:</strong> {data[currentPage ]?.job_name}</p> {/* Display job_name dynamically */}
-              <p><strong>Description:</strong> {data[currentPage ]?.description || "No description available."}</p> {/* Display description */}
+              <p><strong>Job Name:</strong> {data[currentPage]?.job_name}</p> {/* Display job_name dynamically */}
+              <p><strong>Description:</strong> {data[currentPage]?.description || "No description available."}</p> {/* Display description */}
               <p><strong>Submission Date:</strong> {data[currentPage]?.submissionDate}</p> {/* Display submission date */}
-              <p><strong>Status:</strong> {data[currentPage ]?.status}</p> {/* Display status */}
+              <p>
+                <strong>Status:</strong>{" "}
+                <span
+                  className="job-status"
+                  style={{
+                    backgroundColor: new Date(data[currentPage]?.deadline) < new Date() ? "#ffcccc" : "#ccffcc", // Green background for "open"
+                    color: new Date(data[currentPage]?.deadline) < new Date() ? "red" : "green", // Green text for "open"
+                    padding: "2px 5px",
+                    borderRadius: "4px",
+                  }}
+                >
+                  {new Date(data[currentPage]?.deadline) < new Date() ? "Closed" : "Open"}
+                </span>
+              </p> {/* Display status dynamically */}
             </div>
           ) : (
-            // Fallback while data is loading
-            <p>Loading job details...</p>
+            <p>Loading job details...</p> // Fallback while data is loading
           )}
           <h2>About the Job</h2>
-          <p>
-            Dolor enim eu tortor urna sed duis nulla. Aliquam vestibulum, nulla odio nisl vitae. In aliquet pellentesque aenean hac vestibulum turpis mi bibendum diam. Tempor integer aliquam in vitae malesuada fringilla. Elit nisi in eleifend sed nisi. Pulvinar at orci, proin imperdiet commodo consectetur convallis risus.
-          </p>
+          <p>{data[currentPage]?.description || "No description available."}</p> {/* Display description dynamically */}
           <ul>
             <li>Ipsum sit mattis nulla quam nulla. Gravida id gravida ac enim mauris id.</li>
             <li>Non pellentesque congue eget consectetur turpis.</li>
@@ -309,6 +334,7 @@ function ReadJobs() {
           </ul>
         </div>
       )}
+
       {activeSection === "members" && (
         <div className="members-section">
           <h2 style={{ fontSize: "18px", fontWeight: "600", color: "#101828", marginBottom: "16px", marginRight: "650px" }}>
@@ -336,7 +362,6 @@ function ReadJobs() {
                       <input type="checkbox" />
                     </td>
                     <td style={{ padding: "12px", display: "flex", alignItems: "center", gap: "12px" }}>
-                      
                       <div>
                         <p style={{ margin: 0, fontWeight: "500", fontSize: "14px", color: "#101828" }}>
                           {application.first_name} {application.last_name}

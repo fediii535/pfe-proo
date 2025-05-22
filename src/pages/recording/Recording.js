@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './Recording.css';
 import { FaFileVideo } from 'react-icons/fa';
+import Delete from '../../assets/Delete.png';
+import Icon2 from '../../assets/Icon2.png';
 
 const Recording = () => {
   const [checkedFiles, setCheckedFiles] = useState([]);
@@ -151,7 +153,7 @@ const Recording = () => {
                   <div className="green-bar">
                     <span>{checkedFiles.length} file{checkedFiles.length > 1 ? 's' : ''} selected</span>
                     <div className="delete-icon" onClick={handleClearSelection}>
-                      <img src={require('./assets/Delete.png')} alt="Delete Icon" className="delete-icon-img" />
+                      <img src={Delete} alt="Delete Icon" className="delete-icon-img" />
                     </div>
                   </div>
                 )}
@@ -189,7 +191,7 @@ const Recording = () => {
                       checked={checkedFiles.includes(file.id)}
                       onChange={(e) => handleCheckboxChange(e, file.id)}
                     />
-                    <img src={require('./assets/Icon2.png')} alt="File Icon" className="file-icon-img" />
+                    <img src={Icon2} alt="File Icon" className="file-icon-img" />
                     <label htmlFor={`file-${file.id}`}>{file.fileName}</label>
                   </div>
                 </td>

@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
-import './CreateClient.css';
+import './CreateEmployee.css';
 import { FaSearch, FaCalendarAlt, FaUser, FaEnvelope, FaPhone, FaUpload, FaFileAlt } from 'react-icons/fa';
-import Sidebar from './Sidebar';
+import Sidebar from '../../Sidebar';
 import { createClient } from '@supabase/supabase-js'; // Import Supabase client
 
 const supabaseUrl = 'https://agbpojgpdponyeigrsfs.supabase.co';

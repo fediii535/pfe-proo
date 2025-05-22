@@ -101,14 +101,19 @@ form {
 }
 
 .login-text {
-  margin-top: 20px;
+  margin-top: 16px;
   font-size: 14px;
   text-align: center;
+  width: 100%;
+  display: block;
 }
 
 .login-text a {
   color: #6b21a8;
   text-decoration: none;
+  font-weight: 500;
+  display: inline-block;
+  margin-right: 4px;
 }
 
 .login-text a:hover {
@@ -117,16 +122,24 @@ form {
 
 /* Footer */
 .footer {
-  margin-top: -30px ; /* Place le footer en bas */
+  position: absolute;
+  left: 50px;
+  right: 50px;
+  bottom: 20px;
   font-size: 12px;
   color: gray;
-  text-align: center;
-  padding: 10px 0; /* Espacement */
+  text-align: left;
+  padding: 0;
+  width: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .footer a {
   color: #6b21a8;
   text-decoration: none;
+  margin-right: 700px;
 }
 
 .footer a:hover {
