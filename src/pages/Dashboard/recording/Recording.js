@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import './Recording.css';
 import { FaFileVideo } from 'react-icons/fa';
-import Delete from '../../assets/Delete.png';
-import Icon2 from '../../assets/Icon2.png';
+import Delete from '../../../assets/Delete.png';
+import Icon2 from '../../../assets/Icon2.png';
 
 const Recording = () => {
   const [checkedFiles, setCheckedFiles] = useState([]);

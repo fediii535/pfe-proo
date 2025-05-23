@@ -1,9 +1,9 @@
 import React from 'react';
-import './Dashbord.css';
-import image from './assets/image.png';
-import image1 from './assets/image1.png';
-import image2 from './assets/image2.png';
-import image3 from './assets/image3.png';
+import './Dashborddd.css';
+import image from '../../../assets/image.png';
+import image1 from '../../../assets/image1.png';
+import image2 from '../../../assets/image2.png';
+import image3 from '../../../assets/image3.png';
 import { FaUmbrellaBeach, FaUserShield, FaBriefcaseMedical, FaExclamationTriangle } from 'react-icons/fa';
 import { Line } from 'react-chartjs-2';
 import { Bar } from 'react-chartjs-2';

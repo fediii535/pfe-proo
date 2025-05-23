@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import './App.css';
-import authimage from './assets/outhimage.png';
+import authimage from '../../../assets/outhimage.png';
 import { Link, useNavigate } from 'react-router-dom';
-import supabase from './supabaseClient'; // ✅ import par défaut
+import supabase from '../../../supabase/supabaseClient';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false); // Add loading state
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
+    setLoading(true);
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -20,18 +23,14 @@ export default function Login() {
 
       if (error) throw error;
 
-      console.log('User signed in:', data);
-      // Use React's startTransition for navigation to avoid React Router v7 warning
-      if (window.React && React.startTransition) {
-        React.startTransition(() => {
-          navigate('/sidebar', { replace: true }); // use replace to avoid back navigation to login
-        });
-      } else {
-        navigate('/sidebar', { replace: true });
-      }
+      // Only log once if needed for debugging
+      // console.log('User signed in:', data);
+
+      navigate('/sidebar', { replace: true });
     } catch (error) {
-      console.error('Error signing in:', error.message);
-      setError(error.message);
+      setError("Invalid email or password. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -58,7 +57,9 @@ export default function Login() {
               <a href='#'>Forgot password?</a>
             </div>
             {error && <p className="error">{error}</p>}
-            <button type='submit' className='btn-primary'>Sign in</button>
+            <button type='submit' className='btn-primary' disabled={loading}>
+              {loading ? 'Signing in...' : 'Sign in'}
+            </button>
             <button type='button' className='btn-google'>
               <img src='https://www.svgrepo.com/show/475656/google-color.svg' alt='Google' />
               Sign in with Google

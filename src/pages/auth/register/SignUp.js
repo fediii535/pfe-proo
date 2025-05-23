@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import './Signup.css';
-import authimage from './assets/outhimage.png';
+import authimage from '../../../assets/outhimage.png';
 import { Link, useNavigate } from 'react-router-dom';
-import supabase from './supabaseClient'; // ✅ import par défaut
+import supabase from '../../../supabase/supabaseClient'; // ✅ import par défaut
 
 export default function Signup() {
   const [name, setName] = useState('');
@@ -14,24 +14,11 @@ export default function Signup() {
 
   const navigate = useNavigate();
 
-  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-  const handleSubmit = async (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
-    if (isLoading) return;
-
     setIsLoading(true);
-    setAttempts((prev) => prev + 1);
-
-    if (attempts >= 3) {
-      setError('Trop de tentatives. Veuillez réessayer plus tard.');
-      setIsLoading(false);
-      return;
-    }
-
+    setError(null);
     try {
-      await delay(5000);
-
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -51,6 +38,24 @@ export default function Signup() {
         throw error;
       }
 
+      // Insert into profiles table
+      if (data?.user) {
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .insert([
+            {
+              id: data.user.id,
+              email: email,
+              name: name,
+              // add other fields as needed
+            },
+          ]);
+        if (profileError) {
+          setError('Erreur lors de la création du profil: ' + profileError.message);
+          throw profileError;
+        }
+      }
+
       alert('Compte créé avec succès ! Veuillez vérifier votre email pour confirmation.');
       navigate('/');
     } catch (error) {
@@ -60,7 +65,6 @@ export default function Signup() {
       setIsLoading(false);
     }
   };
-
 
   return (
     <div className="signup-main-container">

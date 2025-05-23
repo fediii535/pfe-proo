@@ -2,14 +2,9 @@ import React, { useState } from 'react';
 import '../Settings/Settings.css';
 import { Input, Dropdown, Menu, Select, DatePicker } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
-import { createClient } from '@supabase/supabase-js';
-import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
-import 'react-toastify/dist/ReactToastify.css'; // Import Toastify styles
-
-// Initialize Supabase client
-const supabaseUrl = 'https://agbpojgpdponyeigrsfs.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFnYnBvamdwZHBvbnllaWdyc2ZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYxODk5NzUsImV4cCI6MjA2MTc2NTk3NX0.oWElgbY0Wk9gyFv9tH13pYCePHHQ1vbiqQNarf_zUko';
-const supabase = createClient(supabaseUrl, supabaseKey);
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import supabase from '../../../supabase/supabaseClient';
 
 const Settings = () => {
   const [selectedDepartment, setSelectedDepartment] = useState('Create your department');

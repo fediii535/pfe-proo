@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "antd";
-import { createClient } from "@supabase/supabase-js"; // Import Supabase client
 import "./Jobs.css";
-import groupIcon from "../../assets/Group.png"; // ✅ Icone Edit
-import deleteIcon from "../../assets/Delete.png"; // ✅ Icone Delete
-
-// Initialize Supabase client
-const supabaseUrl = 'https://agbpojgpdponyeigrsfs.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFnYnBvamdwZHBvbnllaWdyc2ZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYxODk5NzUsImV4cCI6MjA2MTc2NTk3NX0.oWElgbY0Wk9gyFv9tH13pYCePHHQ1vbiqQNarf_zUko';
-const supabase = createClient(supabaseUrl, supabaseKey);
+import groupIcon from "../../../assets/Group.png";
+import deleteIcon from "../../../assets/Delete.png";
+import supabase from '../../../supabase/supabaseClient';
 
 const categories = ["View all", "Informatics", "Business", "Design"];
 

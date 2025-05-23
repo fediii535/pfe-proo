@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { Navigate, useNavigate, useLocation } from "react-router-dom";
 import { useAuthContext } from "../context/supabase/SupaBaseConnectionCtx";
 
-// Pages accessibles à tous les rôles
 const commonPages = [
   "/jobs",
   "/profile",
@@ -15,7 +14,6 @@ const commonPages = [
   "/CreateEmployee",
 ];
 
-// Pages spécifiques par rôle
 const rolePages = {
   admin: [
     "/home",
@@ -43,7 +41,7 @@ const rolePages = {
   },
 };
 
-export default function SupaBaseConnectionGuard({ children }) {
+export default function SupabaseConnectionGuard({ children }) {
   const { isAuthenticated, isInitialized, user } = useAuthContext();
   const navigate = useNavigate();
   const location = useLocation();
@@ -53,7 +51,6 @@ export default function SupaBaseConnectionGuard({ children }) {
       const userRole = user.role || "employee";
       const currentPath = location.pathname;
 
-      // Vérifie si la page courante est accessible en commun
       const isCommonPage = commonPages.some((page) =>
         currentPath.startsWith(page)
       );
@@ -64,7 +61,6 @@ export default function SupaBaseConnectionGuard({ children }) {
           currentPath.startsWith(page)
         );
       } else {
-        // Pour les employés, vérifie le statut de vérification
         const employeePages =
           user.verified === "approuved"
             ? rolePages.employee.verified
@@ -75,7 +71,6 @@ export default function SupaBaseConnectionGuard({ children }) {
       }
 
       if (!isCommonPage && !isRoleSpecificPage) {
-        // Redirection selon rôle et statut de vérification
         if (userRole === "admin") {
           navigate("/home");
         } else {
@@ -89,7 +84,6 @@ export default function SupaBaseConnectionGuard({ children }) {
     }
   }, [isInitialized, isAuthenticated, user, location.pathname, navigate]);
 
-  // Affiche loader tant que l'initialisation n'est pas faite
   if (!isInitialized) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -98,11 +92,9 @@ export default function SupaBaseConnectionGuard({ children }) {
     );
   }
 
-  // Si pas authentifié, redirige vers login
   if (!isAuthenticated) {
     return <Navigate to="/login" />;
   }
 
-  // Sinon affiche les enfants
   return <>{children}</>;
 }

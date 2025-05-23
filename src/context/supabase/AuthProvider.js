@@ -1,118 +1,96 @@
-import { AuthResponse } from "@supabase/supabase-js";
-import {
-  createContext,
-  useEffect,
-  useReducer,
-  useCallback,
-  useMemo,
-} from "react";
-import { supabase } from "../../supabase/SupaBase";
-// NOTE: Ensure that supabase is only initialized ONCE in your app (singleton pattern).
-// Multiple initializations can cause "Multiple GoTrueClient instances detected" warning.
+import { createContext, useEffect, useReducer, useCallback, useMemo } from "react";
+import supabase from "../../supabase/supabaseClient";
 
-export type AuthUserType = null | Record<string, any>;
+// ----------------------------------------------------------------------
 
-export type AuthStateType = {
-  isAuthenticated: boolean;
-  isInitialized: boolean;
-  user: AuthUserType;
-};
-
-export type JWTContextType = {
-  method: string;
-  isAuthenticated: boolean;
-  isInitialized: boolean;
-  user: AuthUserType;
-  login: (email: string, password: string) => Promise<AuthResponse>;
-  register: (
-    email: string,
-    password: string,
-    firstName: string
-  ) => Promise<AuthResponse>;
-  logout: () => void;
-};
-
-enum Types {
-  INITIAL = "INITIAL",
-  LOGIN = "LOGIN",
-  REGISTER = "REGISTER",
-  LOGOUT = "LOGOUT",
-}
-
-type Payload = {
-  [Types.INITIAL]: {
-    isInitialized: boolean;
-    isAuthenticated: boolean;
-    user: AuthUserType;
-  };
-  [Types.LOGIN]: {
-    isAuthenticated: boolean;
-    user: AuthUserType;
-  };
-  [Types.REGISTER]: {
-    user: AuthUserType;
-  };
-  [Types.LOGOUT]: undefined;
-};
-
-type ActionsType = ActionMapType<Payload>[keyof ActionMapType<Payload>];
-
-const initialState: AuthStateType = {
+const initialState = {
   isInitialized: false,
   isAuthenticated: false,
   user: null,
 };
 
-const reducer = (state: AuthStateType, action: ActionsType) => {
-  switch (action.type) {
-    case Types.INITIAL:
-      return {
-        isInitialized: action.payload.isInitialized,
-        isAuthenticated: action.payload.isAuthenticated,
-        user: action.payload.user,
-      };
-    case Types.LOGIN:
-      return {
-        ...state,
-        isAuthenticated: true,
-        user: action.payload.user,
-      };
-    case Types.REGISTER:
-      return {
-        ...state,
-        isAuthenticated: true,
-        user: action.payload.user,
-      };
-    case Types.LOGOUT:
-      return {
-        ...state,
-        isAuthenticated: false,
-        user: null,
-      };
-    default:
-      return state;
+const Types = {
+  INITIAL: "INITIAL",
+  LOGIN: "LOGIN",
+  REGISTER: "REGISTER",
+  LOGOUT: "LOGOUT",
+};
+
+const reducer = (state, action) => {
+  if (action.type === Types.INITIAL) {
+    return {
+      isInitialized: action.payload.isInitialized,
+      isAuthenticated: action.payload.isAuthenticated,
+      user: action.payload.user,
+    };
   }
+  if (action.type === Types.LOGIN) {
+    return {
+      ...state,
+      isAuthenticated: true,
+      user: action.payload.user,
+    };
+  }
+  if (action.type === Types.REGISTER) {
+    return {
+      ...state,
+      isAuthenticated: true,
+      user: action.payload.user,
+    };
+  }
+  if (action.type === Types.LOGOUT) {
+    return {
+      ...state,
+      isAuthenticated: false,
+      user: null,
+    };
+  }
+  return state;
 };
 
-export const AuthContext = createContext<JWTContextType | null>(null);
+// ----------------------------------------------------------------------
 
-type AuthProviderProps = {
-  children: React.ReactNode;
-};
+export const AuthContext = createContext(null);
 
-export function SupaBaseConnectionProvider({ children }: AuthProviderProps) {
+// ----------------------------------------------------------------------
+
+export function SupaBaseConnectionProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const initialize = useCallback(async () => {
     try {
+      // await supabase.auth.signOut();
+
+      dispatch({
+        type: Types.INITIAL,
+        payload: {
+          isInitialized: true,
+          isAuthenticated: false,
+          user: null,
+        },
+      });
+
       const { data: sessionData, error: sessionError } =
         await supabase.auth.getSession();
 
-      if (sessionError || !sessionData.session?.user) {
-        throw new Error("No active session");
+      if (sessionError) {
+        throw sessionError;
       }
 
-      const { user } = sessionData.session;
+      const user = sessionData?.session?.user;
+
+      // Fix: Do not throw if no user, just set not authenticated
+      if (!user) {
+        dispatch({
+          type: Types.INITIAL,
+          payload: {
+            isInitialized: false,
+            isAuthenticated: false,
+            user: null,
+          },
+        });
+        return;
+      }
 
       const { data: userData, error: errorGetProfile } = await supabase
         .from("profiles")
@@ -125,7 +103,7 @@ export function SupaBaseConnectionProvider({ children }: AuthProviderProps) {
       dispatch({
         type: Types.INITIAL,
         payload: {
-          isInitialized: true,
+          isInitialized: false,
           isAuthenticated: true,
           user: userData,
         },
@@ -135,7 +113,7 @@ export function SupaBaseConnectionProvider({ children }: AuthProviderProps) {
       dispatch({
         type: Types.INITIAL,
         payload: {
-          isInitialized: true,
+          isInitialized: false,
           isAuthenticated: false,
           user: null,
         },
@@ -147,7 +125,8 @@ export function SupaBaseConnectionProvider({ children }: AuthProviderProps) {
     initialize();
   }, [initialize]);
 
-  const login = useCallback(async (email: string, password: string) => {
+  // LOGIN
+  const login = useCallback(async (email, password) => {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -155,8 +134,8 @@ export function SupaBaseConnectionProvider({ children }: AuthProviderProps) {
 
     if (error) throw error;
 
-    if (data.session?.user) {
-      const { user } = data.session;
+    if (data.session) {
+      const user = data.session.user;
 
       const { data: userData, error: errorGetProfile } = await supabase
         .from("profiles")
@@ -167,35 +146,44 @@ export function SupaBaseConnectionProvider({ children }: AuthProviderProps) {
       if (errorGetProfile) throw errorGetProfile;
 
       dispatch({
-        type: Types.LOGIN,
+        type: Types.INITIAL,
         payload: {
+          isInitialized: false,
           isAuthenticated: true,
           user: userData,
         },
       });
-
-      // Redirect to dashboard or home after login (not /login)
-      window.location.href = "/dashboard";
+      window.location.href = "/login";
+      return;
     }
+
+    dispatch({
+      type: Types.LOGIN,
+      payload: {
+        isAuthenticated: true,
+        user: null,
+      },
+    });
   }, []);
 
+  // REGISTER
   const register = useCallback(
-    async (email: string, password: string, firstName: string) => {
+    async (email, password, firstName) => {
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          data: { first_name: firstName },
-          emailRedirectTo: "https://your-redirect-url.com",
+          data: {
+            first_name: firstName,
+          },
+          emailRedirectTo: "hiiiiiii",
         },
       });
-
-      if (error) throw error;
 
       dispatch({
         type: Types.REGISTER,
         payload: {
-          user: data.user,
+          user: data,
         },
       });
     },
@@ -204,9 +192,10 @@ export function SupaBaseConnectionProvider({ children }: AuthProviderProps) {
 
   const logout = useCallback(async () => {
     await supabase.auth.signOut();
-    dispatch({ type: Types.LOGOUT });
-    // Redirect to login page after logout
-    window.location.href = "/login";
+
+    dispatch({
+      type: Types.LOGOUT,
+    });
   }, []);
 
   const memoizedValue = useMemo(
@@ -219,7 +208,14 @@ export function SupaBaseConnectionProvider({ children }: AuthProviderProps) {
       register,
       logout,
     }),
-    [state, login, register, logout]
+    [
+      state.isAuthenticated,
+      state.isInitialized,
+      state.user,
+      login,
+      logout,
+      register,
+    ]
   );
 
   return (
@@ -228,9 +224,3 @@ export function SupaBaseConnectionProvider({ children }: AuthProviderProps) {
     </AuthContext.Provider>
   );
 }
-
-// export type ActionMapType<M extends { [index: string]: any }> = {
-//   [Key in keyof M]: M[Key] extends undefined
-//     ? { type: Key }
-//     : { type: Key; payload: M[Key] };
-// };
