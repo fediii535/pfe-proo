@@ -1,4 +1,4 @@
-import { createContext, useEffect, useReducer, useCallback, useMemo } from "react";
+import React, { createContext, useEffect, useReducer, useCallback, useMemo } from "react";
 import supabase from "../../supabase/supabaseClient";
 
 // ----------------------------------------------------------------------
@@ -59,8 +59,6 @@ export function SupaBaseConnectionProvider({ children }) {
 
   const initialize = useCallback(async () => {
     try {
-      // await supabase.auth.signOut();
-
       dispatch({
         type: Types.INITIAL,
         payload: {
@@ -79,7 +77,6 @@ export function SupaBaseConnectionProvider({ children }) {
 
       const user = sessionData?.session?.user;
 
-      // Fix: Do not throw if no user, just set not authenticated
       if (!user) {
         dispatch({
           type: Types.INITIAL,
@@ -92,22 +89,49 @@ export function SupaBaseConnectionProvider({ children }) {
         return;
       }
 
+      // Try to get user profile
       const { data: userData, error: errorGetProfile } = await supabase
         .from("profiles")
         .select("*")
         .eq("id", user.id)
-        .single();
+        .maybeSingle();
 
-      if (errorGetProfile) throw errorGetProfile;
+      // If profile doesn't exist, create one
+      if (!userData && !errorGetProfile) {
+        const { data: newProfile, error: createError } = await supabase
+          .from("profiles")
+          .insert([
+            {
+              id: user.id,
+              email: user.email,
+              created_at: new Date().toISOString(),
+            },
+          ])
+          .select()
+          .single();
 
-      dispatch({
-        type: Types.INITIAL,
-        payload: {
-          isInitialized: false,
-          isAuthenticated: true,
-          user: userData,
-        },
-      });
+        if (createError) throw createError;
+        
+        dispatch({
+          type: Types.INITIAL,
+          payload: {
+            isInitialized: false,
+            isAuthenticated: true,
+            user: newProfile,
+          },
+        });
+      } else if (errorGetProfile) {
+        throw errorGetProfile;
+      } else {
+        dispatch({
+          type: Types.INITIAL,
+          payload: {
+            isInitialized: false,
+            isAuthenticated: true,
+            user: userData,
+          },
+        });
+      }
     } catch (error) {
       console.error({ error });
       dispatch({
@@ -136,24 +160,53 @@ export function SupaBaseConnectionProvider({ children }) {
 
     if (data.session) {
       const user = data.session.user;
+      console.log('user:', user);
 
+      // Try to get user profile
       const { data: userData, error: errorGetProfile } = await supabase
         .from("profiles")
         .select("*")
         .eq("id", user.id)
-        .single();
+        .maybeSingle();
 
-      if (errorGetProfile) throw errorGetProfile;
+      // If profile doesn't exist, create one
+      if (!userData && !errorGetProfile) {
+        const { data: newProfile, error: createError } = await supabase
+          .from("profiles")
+          .insert([
+            {
+              id: user.id,
+              email: user.email,
+              created_at: new Date().toISOString(),
+            },
+          ])
+          .select()
+          .single();
 
-      dispatch({
-        type: Types.INITIAL,
-        payload: {
-          isInitialized: false,
-          isAuthenticated: true,
-          user: userData,
-        },
-      });
-      window.location.href = "/login";
+        if (createError) throw createError;
+
+        dispatch({
+          type: Types.INITIAL,
+          payload: {
+            isInitialized: false,
+            isAuthenticated: true,
+            user: newProfile,
+          },
+        });
+      } else if (errorGetProfile) {
+        throw errorGetProfile;
+      } else {
+        dispatch({
+          type: Types.INITIAL,
+          payload: {
+            isInitialized: false,
+            isAuthenticated: true,
+            user: userData,
+          },
+        });
+      }
+
+      window.location.href = "/home";
       return;
     }
 
@@ -176,14 +229,31 @@ export function SupaBaseConnectionProvider({ children }) {
           data: {
             first_name: firstName,
           },
-          emailRedirectTo: "hiiiiiii",
         },
       });
+
+      if (error) throw error;
+
+      if (data.user) {
+        // Create profile for new user
+        const { error: profileError } = await supabase
+          .from("profiles")
+          .insert([
+            {
+              id: data.user.id,
+              email: email,
+              first_name: firstName,
+              created_at: new Date().toISOString(),
+            },
+          ]);
+
+        if (profileError) throw profileError;
+      }
 
       dispatch({
         type: Types.REGISTER,
         payload: {
-          user: data,
+          user: data.user,
         },
       });
     },
@@ -203,18 +273,18 @@ export function SupaBaseConnectionProvider({ children }) {
       isInitialized: state.isInitialized,
       isAuthenticated: state.isAuthenticated,
       user: state.user,
-      method: "jwt",
+      method: "supabase",
       login,
       register,
       logout,
     }),
     [
-      state.isAuthenticated,
       state.isInitialized,
+      state.isAuthenticated,
       state.user,
       login,
-      logout,
       register,
+      logout,
     ]
   );
 
@@ -224,3 +294,13 @@ export function SupaBaseConnectionProvider({ children }) {
     </AuthContext.Provider>
   );
 }
+
+export const useAuth = () => {
+  const context = React.useContext(AuthContext);
+
+  if (!context) {
+    throw new Error("useAuth must be used within a SupaBaseConnectionProvider");
+  }
+
+  return context;
+};

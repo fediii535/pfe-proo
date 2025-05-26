@@ -6,7 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import supabase from '../../../supabase/supabaseClient';
 
-const Settings = () => {
+const CreateJob = () => {
   const [selectedDepartment, setSelectedDepartment] = useState('Create your department');
   const [jobName, setJobName] = useState('');
   const [description, setDescription] = useState('');
@@ -259,4 +259,4 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+export default CreateJob;

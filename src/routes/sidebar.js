@@ -73,7 +73,6 @@ const routes = [
     layout: lazy(() => import("../layout/Dashboard")),
     guard: lazy(() => import("../guards/SupaBaseConnectionGuard")),
   },
- 
   {
     exact: true,
     path: "/employee",

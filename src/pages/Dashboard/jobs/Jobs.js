@@ -21,7 +21,7 @@ function JobCard({ job, editIcon, deleteIcon, onDelete, onEdit }) {
             src={editIcon}
             alt="Edit"
             className="job-icon-btn edit"
-            onClick={() => navigate("/sidebar/jobs/create")}
+            onClick={() => navigate("/jobs/create")}
           />
           <img
             src={deleteIcon}
@@ -47,7 +47,7 @@ function JobCard({ job, editIcon, deleteIcon, onDelete, onEdit }) {
       <hr />
       <div
         className="job-footer"
-        onClick={() => navigate("/sidebar/jobs/read")}
+        onClick={() => navigate("/jobs/read")}
         style={{ cursor: "pointer" }}
       >
         See More
@@ -111,7 +111,7 @@ export default function JobListing() {
           <Button
             type="primary"
             className="add-job-btn"
-            onClick={() => navigate("/sidebar/jobs/create")}
+            onClick={() => navigate("/jobs/create")}
           >
             + Add Job
           </Button>
@@ -167,7 +167,7 @@ export default function JobListing() {
         <Button
           type="primary"
           className="add-job-btn"
-          onClick={() => navigate("/sidebar/jobs/create")}
+          onClick={() => navigate("/jobs/create")}
         >
           + Add Job
         </Button>

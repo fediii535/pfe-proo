@@ -1,25 +1,16 @@
-import React, { Suspense } from "react";
-import { Routes, Route } from "react-router-dom";
-import routes from "./routes/authentication"; // adapte le chemin si besoin
+//import Login from "./Views/Login/login";
 
-function App() {
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { renderRoutes, routes } from "./Routes/routes";
+
+const queryClient = new QueryClient();
+
+const App = () => {
   return (
-    <Suspense fallback={<div>Chargement...</div>}>
-      <Routes>
-        {routes.map((route, index) => {
-          const Component = route.component;
-          return (
-            <Route
-              key={index}
-              path={route.path}
-              element={<Component />}
-            />
-          );
-        })}
-        <Route path="*" element={<div>404 Not Found</div>} />
-      </Routes>
-    </Suspense>
+    <QueryClientProvider client={queryClient}>
+      {renderRoutes(routes)}
+    </QueryClientProvider>
   );
-}
+};
 
 export default App;

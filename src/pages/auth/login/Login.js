@@ -26,7 +26,7 @@ export default function Login() {
       // Only log once if needed for debugging
       // console.log('User signed in:', data);
 
-      navigate('/sidebar', { replace: true });
+      navigate('/home', { replace: true });
     } catch (error) {
       setError("Invalid email or password. Please try again.");
     } finally {
@@ -65,7 +65,7 @@ export default function Login() {
               Sign in with Google
             </button>
             <p className='signup-text'>
-              Don't have an account? <Link to='/SignUp'>Sign up</Link>
+              Don't have an account? <Link to='/signup'>Sign up</Link>
             </p>
           </form>
         </div>

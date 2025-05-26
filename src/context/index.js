@@ -1,4 +1,2 @@
-
-
-export { useAuthContext } from "./supabase/SupaBaseConnectionCtx";
-export { SupaBaseConnectionProvider } from "./supabase/authprovider";
+export { useAuth as useAuthContext } from "./supabase/AuthProvider.js";
+export { SupaBaseConnectionProvider } from "./supabase/AuthProvider.js";

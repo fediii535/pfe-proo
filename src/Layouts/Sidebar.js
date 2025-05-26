@@ -57,7 +57,7 @@ const Sidebar = () => {
         <ul className="space-y-4">
           <li className={`${baseLinkClass} ${hoverClass}`}>
             <Home size={20} className={iconClass + " " + activeClass} />
-            <a href="/home" className="transition-all duration-200 group-hover:font-bold">Home</a>
+            <a href="/" className="transition-all duration-200 group-hover:font-bold">Home</a>
           </li>
           <li className={`${baseLinkClass} ${hoverClass}`}>
             <ClipboardList size={20} className={iconClass + " " + activeClass} />
