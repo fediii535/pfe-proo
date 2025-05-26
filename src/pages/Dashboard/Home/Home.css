@@ -22,9 +22,10 @@
 
 .main-content {
   flex: 1; /* Allow the main content to stretch */
-  max-width: 1400px; /* Increase the maximum width */
+  max-width: 800px; /* Increase the maximum width */
   padding: 20px; /* Add padding for spacing */
   margin: 0 auto; /* Center the content horizontally */
+  margin-left: 210px; /* Décalage plus important à droite */
 }
 
 .page-title-container {

@@ -3,6 +3,8 @@
   display: flex;
   min-height: 100vh;
   background: #f8f9fc;
+
+  
 }
 
 /* Sidebar */
@@ -53,6 +55,7 @@
 .content {
   flex-grow: 1;
   padding: 30px;
+ 
 }
 
 .header {
