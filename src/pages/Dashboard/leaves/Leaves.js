@@ -200,7 +200,7 @@ const Leaves = () => {
   );
 
   return (
-    <div className="leaves-container">
+    <div className="leaves-container" style={{ marginLeft: "150px" }}>
       <header className="leaves-header">
         <h1>Home</h1>
       </header>

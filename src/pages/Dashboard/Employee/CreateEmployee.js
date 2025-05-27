@@ -116,7 +116,7 @@ const CreateClient = () => {
   return (
     <div className="page-layout">
       <Sidebar />
-      <div className="content-container">
+      <div className="content-container" style={{ marginLeft:'220px'}}>
         <div className="create-client-container">
           <h2>Create</h2>
           <div>

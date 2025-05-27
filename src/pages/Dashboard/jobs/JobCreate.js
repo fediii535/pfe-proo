@@ -130,7 +130,7 @@ const CreateJob = () => {
   };
 
   return (
-    <div className="profile-settings" style={{ backgroundColor: bgColor }}>
+    <div className="profile-settings" style={{ backgroundColor: bgColor, marginLeft: "90px", width:"1090px" }}>
       <ToastContainer /> {/* Add ToastContainer to render toast messages */}
       <h1>Create Job</h1>
 

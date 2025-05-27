@@ -99,7 +99,7 @@ const Employee = () => {
   };
 
   return (
-    <div className="employee-container">
+    <div className="employee-container" style={{marginLeft: "100px"}}>
       <div className="employee-header">
         <h1>Employees</h1>
         <button className="export-btn">
