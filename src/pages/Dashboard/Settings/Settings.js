@@ -49,7 +49,7 @@ const Settings = () => {
   );
 
   return (
-    <div className="profile-settings">
+    <div className="profile-settings" style={{ marginLeft: "100px", width:"86%"}}>
       <h1>Profile Settings</h1>
 
       <section className="company-profile" >

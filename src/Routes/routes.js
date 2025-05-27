@@ -49,7 +49,7 @@ export const routes= [
   //   element: <RedirectByRole />,
   // },
   {
-    path: "/",
+    path: "/home",
     element: <Home/>,
     layout: MainLayout,
     // Guards: Au/thGuard,
@@ -76,13 +76,13 @@ export const routes= [
   },
 
   {
-    path: "/jobs/create",
+    path: "/jobs/JobCreate",
     element: <CreateJob />,
     layout: MainLayout,
     // Guards: Au/thGuard,
   },
   {
-    path: "/vue-more/:id",
+    path: "/jobs/ReadJobs",
     element: <ReadJobs />,
     layout: MainLayout,
     // Guards: Au/thGuard,

@@ -1,9 +1,10 @@
 .profile-settings {
-  max-width: 800px;
+  max-width: 600px;
   margin: 0 auto;
   padding: 20px;
   font-family: Arial, sans-serif;
   color: #333;
+  
 }
 
 .profile-settings h1 {

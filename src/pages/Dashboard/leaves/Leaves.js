@@ -204,7 +204,7 @@ const Leaves = () => {
   const { Search } = Input;
 
   return (
-    <div className="leaves-container">
+    <div className="leaves-container" style={{ marginLeft: "150px" }}>
       <header className="leaves-header">
         <h1>Leaves</h1>
       </header>

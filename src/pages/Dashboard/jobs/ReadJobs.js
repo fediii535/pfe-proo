@@ -215,7 +215,7 @@ function ReadJobs() {
   };
 
   return (
-    <div className="read-jobs-container">
+    <div className="read-jobs-container" style={{ marginLeft: "240px"}}>
       <button className="back-button" onClick={() => navigate(-1)}>
         ← Go Back
       </button> 
@@ -241,7 +241,8 @@ function ReadJobs() {
         </p> {/* Display status dynamically */}
         <button 
           className="view-portfolio-btn" 
-          onClick={() => navigate("/CreateClient")}>
+          onClick={() => navigate("/jobs/apply/1")}
+        >
           + View submissions
         </button>
       </div>
@@ -285,18 +286,7 @@ function ReadJobs() {
           }}>
           Members
         </button>
-        <button
-          className="tab-button"
-          style={{
-            width: "84px",
-            height: "36px",
-            borderRadius: "6px",
-            padding: "8px 12px",
-            backgroundColor: "transparent",
-            color: "#6B46C1",
-          }}>
-          Dummy
-        </button>
+        
       </div>
 
       {activeSection === "about" && (

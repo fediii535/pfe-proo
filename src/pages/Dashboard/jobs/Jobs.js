@@ -12,8 +12,8 @@ function JobCard({ job, editIcon, deleteIcon, onDelete, onEdit }) {
   const navigate = useNavigate();
 
   return (
-    <div className="job-card">
-      <div className="job-header">
+    <div className="job-card" >
+      <div className="job-header" >
         <div className="job-icon"></div>
         <h3>{job.job_name}</h3> {/* Display job_name here */}
         <div className="job-actions">
@@ -47,7 +47,7 @@ function JobCard({ job, editIcon, deleteIcon, onDelete, onEdit }) {
       <hr />
       <div
         className="job-footer"
-        onClick={() => navigate("/jobs/read")}
+        onClick={() => navigate("/jobs/ReadJobs")}
         style={{ cursor: "pointer" }}
       >
         See More
@@ -167,7 +167,7 @@ export default function JobListing() {
         <Button
           type="primary"
           className="add-job-btn"
-          onClick={() => navigate("/jobs/create")}
+          onClick={() => navigate("/jobs/JobCreate")}
         >
           + Add Job
         </Button>
