@@ -38,7 +38,7 @@ export default function Login() {
       
       <div className='login-container'>
         <div className='login-card'>
-          <h1 className='logo'>Yuna</h1>
+          <h1 className='logo'>RHM</h1>
           <h2>Log in</h2>
           <p>Welcome back! Please enter your details.</p>
           <form onSubmit={handleSubmit}>
@@ -51,7 +51,7 @@ export default function Login() {
               <input type='password' placeholder='********' value={password} onChange={(e) => setPassword(e.target.value)} required />
             </div>
             <div className='options'>
-              <label>
+              <label style={{display:'flex',alignItems:'center'}}>
                 <input type='checkbox' /> Remember for 30 days
               </label>
               <a href='#'>Forgot password?</a>
@@ -78,8 +78,11 @@ export default function Login() {
       <div className='image-container'>
         <img src={authimage} alt='Auth' />
         <div className='overlay'>
-          <h1>Lorem Ipsum is simply dummy text</h1>
-          <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard.</p>
+          <h1> Effortless HR & Smart Work Tracking </h1>
+          <p>     Manage leave requests, track working hours, and boost
+            productivity—all in one place. Our AI-powered system ensures
+            fairness and efficiency, helping teams stay focused while
+            simplifying HR tasks..</p>
           <div className='users-join'>
             <span>Join 40,000+ users</span>
             <span>20,000+ letters</span>

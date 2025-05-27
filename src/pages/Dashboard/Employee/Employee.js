@@ -8,6 +8,7 @@ import {
   FileDown
 } from "lucide-react";
 import "./Employee.css";
+import { Input, Space } from 'antd';
 
 const Employee = () => {
   const allDataInit = [
@@ -97,6 +98,7 @@ const Employee = () => {
     setSelectedCount(0);
     setSelectAll(false);
   };
+  const { Search } = Input;
 
   return (
     <div className="employee-container">
@@ -106,8 +108,9 @@ const Employee = () => {
           <FileDown size={16} /> Export
         </button>
       </div>
+      <Search placeholder="input search text" onSearch={''} style={{ width: 200 }} />
 
-      <div className="section-header">
+      {/* <div className="section-header">
         <div className="search-container">
           <input
             type="text"
@@ -116,7 +119,7 @@ const Employee = () => {
             onChange={handleSearch}
           />
         </div>
-      </div>
+      </div> */}
 
       <div className="table-container">
         <h2 className="table-header">Latest Hiring</h2>

@@ -7,6 +7,9 @@ import {
   Trash2,
 } from "lucide-react";
 import "./Registrations.css"; // Import CSS
+import { Input, Space } from 'antd';
+import reject from '../../../assets/reject.png'
+import accept from '../../../assets/accept.png'
 
 const Registrations = () => {
   const allData = Array.from({ length: 100 }, (_, index) => ({
@@ -101,11 +104,11 @@ const Registrations = () => {
     );
     closeStatusModal();
   };
-
+  const { Search } = Input;
   return (
     <div className="registrations-container">
       <header className="header">
-        <h1>Home</h1>
+        <h1>Registrations</h1>
         <button className="export-btn">
           <CloudDownload size={16} /> Export
         </button>
@@ -114,9 +117,10 @@ const Registrations = () => {
       <div className="search-section">
         <div>
           <h3>Latest Registrations</h3>
-          <p>Keep Lorem IpsumLorem IpsumLorem Ipsum Lorem</p>
         </div>
-        <div className="search-box">
+        <Search placeholder="input search text" onSearch={''} style={{ width: 200 }} />
+
+        {/* <div className="search-box">
           <input
             type="text"
             placeholder="Search"
@@ -124,7 +128,7 @@ const Registrations = () => {
             onChange={handleSearch}
           />
           <Search className="search-icon" size={16} />
-        </div>
+        </div> */}
       </div>
 
       <div className="table-container">
@@ -179,12 +183,10 @@ const Registrations = () => {
                       {item.status}
                     </td>
                     <td className="actions">
-                      <button onClick={() => openStatusModal(item.key)}>
-                        <Check size={16} />
-                      </button>
-                      <button onClick={() => openDeleteModal(item.key)}>
-                        <X size={16} />
-                      </button>
+                
+                      <img src={reject} onClick={() => openDeleteModal(item.key)}/>
+
+                      <img src={accept} onClick={() => openStatusModal(item.key)}/>
                     </td>
                   </tr>
                 ))

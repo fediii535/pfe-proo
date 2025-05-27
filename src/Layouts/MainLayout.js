@@ -1,27 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import logo from "../assets/icons/logo.png";
-import Home from "../assets/icons/homeLogo.png";
-import regisrations from "../assets/icons/registration.png";
-import leaves from "../assets/icons/leaves.png";
-import employees from "../assets/icons/employees.png";
-import jobs from "../assets/icons/jobs.png";
-import recordings from "../assets/icons/recordings.png";
-import settings from "../assets/icons/settings.png";
-import avatar from "../assets/images/girl.jpg";
-import { handleLogout } from "../api/logout";
+import { useLocation } from "react-router-dom";
 import { useUserRole } from "../api/getUser";
-import { Skeleton, Tooltip } from "antd";
+import { Skeleton } from "antd";
 import supabase from '../supabase/supabaseClient';
-import { GrLogout } from "react-icons/gr";
 import { useQuery } from "@tanstack/react-query";
 import { getMe } from "../api/getMe";
 import Sidebar from "./Sidebar";
+import { Menu } from "lucide-react";
 
 const MainLayout = ({ children }) => {
   const location = useLocation();
   const HeaderTitle = location.state?.title;
   const [userInfo, setUserInfo] = useState({ name: "", email: "", avatar: "" });
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const { data: currentUser, isLoading: isMeLoading } = useQuery({
     queryKey: ["me"],
@@ -70,18 +61,26 @@ const MainLayout = ({ children }) => {
   }
 
   return (
-    <div className="flex w-full h-screen">
-
+    <div className="layout-container">
       <Sidebar/>
-      {/* Main Content */}
-      <div className="flex flex-col w-full h-screen pt-8 pb-12 gap-8 ml-[243px]">
+      <div className="child-container">
         {/* Header */}
-        <header className="w-full h-[38px] items-center px-8 py-3 fixed mb-[38px] bg-white z-10 shadow-sm flex justify-between">
-          <h1 className="text-xl font-semibold text-gray-800">{HeaderTitle}</h1>
+        <header className={`h-16 bg-white shadow-sm px-8 flex items-center justify-between fixed top-0 right-0 transition-all duration-300 ${isSidebarOpen ? 'left-[240px]' : 'left-0'} z-10`}>
+          <div className="flex items-center gap-4">
+            {/* <button 
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            >
+              <Menu size={24} />
+            </button> */}
+            <h1 className="text-xl font-semibold text-gray-800">{HeaderTitle}</h1>
+          </div>
         </header>
 
-        {/* Children Content */}
-        <main className="pt-[64px] px-8 h-full overflow-auto">{children}</main>
+        {/* Main Content */}
+        <main className="flex-1 pt-16 px-8 overflow-auto">
+          {children}
+        </main>
       </div>
     </div>
   );

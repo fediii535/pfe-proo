@@ -22,10 +22,10 @@
 
 .main-content {
   flex: 1; /* Allow the main content to stretch */
-  max-width: 800px; /* Increase the maximum width */
+   /* Increase the maximum width */
   padding: 20px; /* Add padding for spacing */
-  margin: 0 auto; /* Center the content horizontally */
-  margin-left: 210px; /* Décalage plus important à droite */
+  /* margin: 0 auto; */
+  /* margin-left: 210px; Décalage plus important à droite */
 }
 
 .page-title-container {
@@ -94,7 +94,7 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start; /* Align content to the left */
-  width: 250px; /* Adjusted width for a rectangular shape */
+  width: 218px; /* Adjusted width for a rectangular shape */
   height: 100px; /* Slightly increased height for better spacing */
   gap: 14.87px; /* Adjusted gap */
   overflow: hidden; /* Prevent content from overflowing the card */
@@ -259,7 +259,7 @@
   margin-top: 20px; /* Add spacing above the section */
   text-align: left;
   overflow-x: auto; /* Prevent horizontal overflow */
-  max-width: 800px; /* Limit the maximum width */
+  /* max-width: 800px; Limit the maximum width */
   margin-left: 0; /* Align to the left */
 }
 
@@ -343,16 +343,16 @@
 }
 
 .sidebar{
-  position: relative; /* Ensure proper positioning */
-  top: 0; /* Stick to the top */
-  right: 0; /* Align to the right */
-  width: 296px; /* Fixed width as per the image */
-  background: #fff; /* White background */
-  padding: 40px 32px; /* Top and right padding as per the image */
-  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow on the left */
+  /* position: relative; 
+  top: 0; 
+  right: 0; 
+  width: 296px;
+  background: #fff; 
+  padding: 40px 32px; 
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1); 
   display: flex;
   flex-direction: column;
-  gap: 24px; /* Spacing between elements */
+  gap: 24px; */
 }
 
 .profile-section {

@@ -3,8 +3,8 @@
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 100%;
+  /* margin: 0 auto; */
 }
 
 .leaves-header {
@@ -101,6 +101,7 @@
 }
 
 .table-container {
+  margin-top: 12px;
   overflow-x: auto;
   margin-bottom: 16px;
   border: 1px solid #e5e7eb;

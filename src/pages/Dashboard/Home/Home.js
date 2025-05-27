@@ -158,7 +158,7 @@ const Home = () => {
   };
 
   const goToSettings = () => {
-    navigate("/sidebar/settings");
+    navigate("/settings");
   };
 
   const goToViewMore = (key) => {
@@ -280,7 +280,7 @@ const Home = () => {
       <div className="sidebar" style={{ marginLeft: "20px" }}>
         <div className="profile-section">
           <User className="profile-picture" />
-          <h3>Farouk Abichou</h3>
+          <h3>Fedi</h3>
           <p>Software Developer</p>
           <div className="profile-actions">
             <button className="settings-btn" onClick={goToSettings}>Settings</button>

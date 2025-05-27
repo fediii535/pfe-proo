@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Search, Check, X, Trash2 } from "lucide-react";
 import "./Leaves.css";
 import supabase from '../../../supabase/supabaseClient';
+import { Input, Space } from 'antd';
+import accept from '../../../assets/accept.png'
+import reject from '../../../assets/reject.png'
 
 const Leaves = () => {
   const [data, setData] = useState([]);
@@ -198,21 +201,19 @@ const Leaves = () => {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+  const { Search } = Input;
 
   return (
     <div className="leaves-container">
       <header className="leaves-header">
-        <h1>Home</h1>
+        <h1>Leaves</h1>
       </header>
+      <Search placeholder="input search text" onSearch={''} style={{ width: 200 }} />
 
-      <h2 className="leaves-latest">Latest Leaves Request</h2>
-
-      <p className="leaves-description">
-        Keep Lorem IpsumLorem IpsumLorem Ipsum Lorem
-      </p>
+  
       <div className="search-container">
         <div className="search-input-wrapper">
-          <Search className="search-icon" size={16} />
+          {/* <Search className="search-icon" size={16} />
           <input
             type="text"
             placeholder="   Search"
@@ -220,7 +221,7 @@ const Leaves = () => {
             onChange={handleSearch}
             className="search-input"
             style={{ textIndent: "10px", width: "200px" }}
-          />
+          /> */}
         </div>
       </div>
 
@@ -233,7 +234,7 @@ const Leaves = () => {
             </button>
           </div>
         ) : (
-          <h3 className="table-header-title">Latest Registration</h3>
+          <h3 className="table-header-title">Latest Leaves</h3>
         )}
         <div className="table-scroll">
           <table className="styled-table">
@@ -289,7 +290,11 @@ const Leaves = () => {
                       {item.status}
                     </td>
                     <td className="actions">
-                      <button
+
+                    <img src={reject}  onClick={() => confirmApprove(item.id)}/>
+
+                    <img src={accept} onClick={() => handleReject(item.id)}/>
+                      {/* <button
                         className="action-approve"
                         onClick={() => confirmApprove(item.id)}
                       >
@@ -300,7 +305,7 @@ const Leaves = () => {
                         onClick={() => handleReject(item.id)}
                       >
                         <X size={16} />
-                      </button>
+                      </button> */}
                     </td>
                   </tr>
                 ))

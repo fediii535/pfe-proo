@@ -111,6 +111,7 @@ form {
   align-items: center;
   margin-bottom: 20px;
   font-size: 14px;
+  gap: 12px;
 }
 
 .options a {

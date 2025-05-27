@@ -6,38 +6,38 @@
 
 /* Sidebar */
 .sidebar {
-  position: fixed; /* Fix the sidebar in place */
-  top: 0;
-  left: 0;
-  width: 150px;
-  height: 100vh; /* Full viewport height */
-  overflow: hidden; /* Prevent scrolling within the sidebar */
-  
-  color: #333;
-  display: flex;
+  gap: 12px;
   flex-direction: column;
+  /* position: fixed; */
+  /* top: 0;
+  left: 0; */
+  /* width: 150px; */
+  /* min-height: 100vh;
+  overflow: hidden;  */
+  
+  /* color: #333;
+  display: flex;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  padding: 20px;
+  padding: 20px; */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .sidebarleft {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 185px;
+  /* width: 240px; */
   height: 100vh;
   background: #fff;
   box-shadow: 2px 0 16px 0 rgba(80, 80, 180, 0.08);
   display: flex;
   flex-direction: column;
   padding: 32px 20px 20px 20px;
-  z-index: 100;
   border-top-right-radius: 32px;
   border-bottom-right-radius: 32px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100vh;
+  /* position: fixed; */
+  /* left: 0; */
+  /* top: 0; */
+  /* z-index: 50; */
+  /* overflow-y: auto; */
+  /* transition: transform 0.3s ease-in-out; */
 }
 
 /* Logo */
@@ -49,12 +49,13 @@
 .logo {
   font-size: 24px;
   font-weight: bold;
-  color: #6e9dbf;
+  /* color: #6e9dbf; */
+  color: #6b21a8;
 }
 
 .sidebar-logo {
   color: #6754BD;
-  font-size: 2rem;         /* ~32px */
+  font-size: 2rem;
   font-weight: 900;
   font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
   letter-spacing: 1.5px;
@@ -73,35 +74,16 @@
   transform: scale(1.05);
 }
 
-/* Menu */
-.sidebar-menu {
-  flex: 1;
-}
-
+/* Navigation */
 .sidebar-nav {
   flex: 1;
+  /* overflow-y: auto; */
 }
 
 .sidebar-navlist {
   list-style: none;
   padding: 0;
   margin: 0;
-}
-
-.menu-item {
-  display: flex;
-  align-items: center;
-  padding: 12px;
-  margin: 5px 0;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 8px;
-  transition:  0.3s ease;
-}
-
-.menu-item .icon {
-  margin-right: 10px;
-  font-size: 18px;
 }
 
 .sidebar-link {
@@ -115,8 +97,8 @@
   color: #444;
   font-weight: 500;
   font-size: 1.08rem;
-  transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s;
-  margin-bottom: 18px;
+  transition: all 0.2s ease;
+  margin-bottom: 8px;
   text-decoration: none;
 }
 
@@ -124,72 +106,16 @@
   background: linear-gradient(90deg, #ede9fe 0%, #dbeafe 100%);
   color: #7c3aed;
   box-shadow: 0 2px 12px #c7d2fe55;
-  transform: scale(1.03);
+  transform: translateX(4px);
 }
 
-.sidebar-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px;
-  color: #4a5568;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.sidebar-item:hover {
-  background-color: #e9d8fd;
-  color: #6b46c1;
-}
-
-.sidebar-item a {
+.sidebar-link a {
   text-decoration: none;
   color: inherit;
-  flex-grow: 1;
+  width: 100%;
 }
 
-.sidebar-badge {
-  position: absolute;
-  right: 18px;
-  top: 8px;
-  background: linear-gradient(90deg, #4ade80 0%, #22d3ee 100%);
-  color: #fff;
-  font-size: 0.8rem;
-  font-weight: bold;
-  border-radius: 999px;
-  padding: 2px 8px;
-  box-shadow: 0 0 8px 2px #22c55e55;
-  animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-  0% { box-shadow: 0 0 8px 2px #22c55e55; }
-  50% { box-shadow: 0 0 16px 4px #22c55e99; }
-  100% { box-shadow: 0 0 8px 2px #22c55e55; }
-}
-
-/* Footer */
-.sidebar-footer {
-  border-top: 1px solid #ddd;
-  padding-top: 10px;
-}
-
-.logout {
-  display: flex;
-  align-items: center;
-  padding: 12px;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 8px;
-  transition: color 0.3s ease,  0.3s ease;
-}
-
-.logout:hover {
-  background-color: #ffe6e6;
-  color: #d9534f;
-}
-
+/* Settings */
 .sidebar-settings {
   margin-top: auto;
   margin-bottom: 18px;
@@ -208,35 +134,48 @@
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-}
-
-.sidebar-settings-link {
-  transition: font-weight 0.2s;
+  transition: all 0.2s ease;
 }
 
 .sidebar-settings-btn:hover {
   background: linear-gradient(90deg, #ede9fe 0%, #dbeafe 100%);
   color: #7c3aed;
   box-shadow: 0 2px 12px #c7d2fe55;
+  transform: translateX(4px);
+}
+
+.sidebar-settings-icon {
+  transition: transform 0.2s;
 }
 
 .sidebar-settings-btn:hover .sidebar-settings-icon {
-  color: #7c3aed;
   transform: scale(1.1);
 }
 
-.sidebar-settings-btn:hover .sidebar-settings-link {
-  font-weight: bold;
+.sidebar-settings-link {
+  text-decoration: none;
+  color: inherit;
+  transition: font-weight 0.2s;
 }
 
-.sidebar-userinfo {
+.sidebar-settings-btn:hover .sidebar-settings-link {
+  font-weight: 600;
+}
+
+/* User Info */
+/* .sidebar-userinfo {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-top: 10px;
+  padding: 12px;
+  background: #f8f8ff;
+  border-radius: 12px;
+  margin-top: auto;
+} */
+.sidebar-userinfo{
+  display: flex;
+  align-items: center;
 }
-
 .sidebar-avatar {
   width: 44px;
   height: 44px;
@@ -250,45 +189,57 @@
 }
 
 .sidebar-userdetails {
+  flex: 1;
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 8px;
 }
 
 .sidebar-username {
   font-weight: 600;
-  color: #22223b;
-  margin-bottom: 2px;
-  transition: color 0.2s;
+  color: #1f2937;
+  margin: 0;
+  font-size: 0.95rem;
 }
 
 .sidebar-useremail {
-  font-size: 0.95rem;
-  color: #7c7c7c;
-  max-width: 140px;
+  color: #6b7280;
+  margin: 0;
+  font-size: 0.85rem;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  max-width: 120px;
 }
 
 .sidebar-logout {
-  color: #7c7c7c;
-  margin-left: -18px;
+  color: #6b7280;
   cursor: pointer;
-  transition: color 0.2s;
+  transition: all 0.2s ease;
+  padding: 4px;
+  border-radius: 6px;
 }
 
 .sidebar-logout:hover {
-  color: #7c3aed;
+  color: #ef4444;
+  background: #fee2e2;
+  transform: scale(1.1);
 }
 
 /* Contenu principal */
 .main-content {
-  margin-left: 250px; /* Adjust for the fixed sidebar width */
-  overflow-y: auto; /* Allow scrolling for the main content */
+  /* margin-left: 250px;  */
+  /* overflow-y: auto; */
   height: 100vh; /* Ensure it takes the full height */
 
   flex: 1;
   padding: 20px;
   
+}
+.layout-container{
+  display: flex;
+}
+.child-container{
+  width: 100%;
+  padding: 16px;
 }

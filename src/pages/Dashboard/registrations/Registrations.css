@@ -359,3 +359,8 @@
   border-color: #d0d5dd;
   cursor: not-allowed;
 }
+.search-section{
+  display: flex;
+  text-align: center;
+  justify-content: space-between;
+}

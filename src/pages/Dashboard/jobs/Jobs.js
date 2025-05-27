@@ -173,14 +173,8 @@ export default function JobListing() {
         </Button>
       </div>
 
-      <div
-        className="job-title-section"
-        style={{ textAlign: "left", marginRight: "1010px" }}
-      >
-        <h2>Job Title</h2>
-      </div>
+   
 
-      <p className="subtitle">Lorem Ipsum Lorem Ipsum</p>
 
       <div className="categories">
         {categories.map((category, i) => (

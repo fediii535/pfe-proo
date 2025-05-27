@@ -53,7 +53,7 @@ const Settings = () => {
       <h1>Profile Settings</h1>
 
       <section className="company-profile" >
-        <h2 style={{ textAlign: 'left' }}>Company profile </h2> 
+        <h2 style={{ textAlign: 'left' }}>User profile </h2> 
         <p className="profile-description">Update your company photo and details here.</p>
 
         <div className="form-section">

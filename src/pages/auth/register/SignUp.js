@@ -69,7 +69,7 @@ export default function Signup() {
   return (
     <div className="signup-main-container">
       <div className="signup-left">
-        <h1 className='logo'>Yuna</h1>
+        <h1 className='logo'>RHM</h1>
         <h2>Sign Up</h2>
         <form onSubmit={handleSubmit}>
           <div className="input-group">

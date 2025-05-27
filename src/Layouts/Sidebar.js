@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-
 import {
   Home,
   ClipboardList,
@@ -9,16 +8,18 @@ import {
   CheckCircle,
   Settings,
   LogOut,
+  X,
 } from "lucide-react";
 import { useAuthContext } from "../context";
 import { createClient } from "@supabase/supabase-js";
 import "./Sidebar.css";
+import Avatar from "../assets/avatar.svg";
 
 const supabaseUrl = 'https://agbpojgpdponyeigrsfs.supabase.co';
 const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFnYnBvamdwZHBvbnllaWdyc2ZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYxODk5NzUsImV4cCI6MjA2MTc2NTk3NX0.oWElgbY0Wk9gyFv9tH13pYCePHHQ1vbiqQNarf_zUko";
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, onClose }) => {
   const [email, setEmail] = useState("");
   const { user, logout } = useAuthContext();
   const [regCount, setRegCount] = useState(0);
@@ -47,54 +48,60 @@ const Sidebar = () => {
   const baseLinkClass = "sidebar-link flex items-center space-x-3";
 
   return (
-    <div className="sidebarleft">
-      {/* Logo */}
-      <p className="sidebar-logo">Yuna</p>
+    <aside className={`sidebarleft transition-all duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <div className="flex justify-between items-center mb-8">
+        <p className="sidebar-logo">RHM </p>
+        {/* <button 
+          onClick={onClose}
+          className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+        >
+          <X size={20} />
+        </button> */}
+      </div>
 
-      <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+      <div className="flex-1 flex flex-col">
         {/* Navigation */}
         <nav className="sidebar-nav">
           <ul className="sidebar-navlist">
             <li className={baseLinkClass}>
               <Home size={20} />
-              <a href="/home" style={{ textDecoration: "none" }}>Home</a>
+              <a href="/" className="text-gray-700 hover:text-indigo-600">Home</a>
             </li>
             <li className={baseLinkClass}>
               <ClipboardList size={20} />
-              <a href="/registrations" style={{ textDecoration: "none" }}>Registrations</a>
+              <a href="/registrations" className="text-gray-700 hover:text-indigo-600">Registrations</a>
             </li>
             <li className={baseLinkClass}>
               <UserPlus size={20} />
-              <a href="/leaves" style={{ textDecoration: "none" }}>Leaves</a>
+              <a href="/leaves" className="text-gray-700 hover:text-indigo-600">Leaves</a>
             </li>
             <li className={baseLinkClass}>
               <Users size={20} />
-              <a href="/employee" style={{ textDecoration: "none" }}>Employee</a>
+              <a href="/employee" className="text-gray-700 hover:text-indigo-600">Employee</a>
             </li>
             <li className={baseLinkClass}>
               <Briefcase size={20} />
-              <a href="/jobs" style={{ textDecoration: "none" }}>Jobs</a>
+              <a href="/jobs" className="text-gray-700 hover:text-indigo-600">Jobs</a>
             </li>
             <li className={baseLinkClass}>
               <CheckCircle size={20} />
-              <a href="/recordings" style={{ textDecoration: "none" }}>Recordings</a>
+              <a href="/recordings" className="text-gray-700 hover:text-indigo-600">Recordings</a>
+            </li>
+
+            <li className={baseLinkClass}>
+            <Settings size={20} className="sidebar-settings-icon" />
+              <a href="/settings" className="sidebar-settings-link">Settings</a>
             </li>
           </ul>
         </nav>
 
-        {/* Settings */}
-        <div className="sidebar-settings">
-          <button className="sidebar-settings-btn">
-            <Settings size={20} className="sidebar-settings-icon" />
-            <a href="/settings" className="sidebar-settings-link" style={{ textDecoration: "none" }}>Settings</a>
-          </button>
-        </div>
+       
       </div>
 
       {/* User info */}
-      <div className="sidebar-userinfo" style={{ background: "#f8f8ff", padding: 10 }}>
+      <div className="sidebar-userinfo">
         <img
-          src="https://via.placeholder.com/40"
+          src={Avatar}
           alt="User Avatar"
           className="sidebar-avatar"
         />
@@ -115,7 +122,7 @@ const Sidebar = () => {
           />
         </div>
       </div>
-    </div>
+    </aside>
   );
 };
 
